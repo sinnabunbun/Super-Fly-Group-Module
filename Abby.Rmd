@@ -4,52 +4,91 @@ author: "Abby"
 date: "11/5/2021"
 output: html_document
 ---
+#Exercise 2: Introduction to phylo
+###SOURCE: http://www.phytools.org/Cordoba2017/ex/2/Intro-to-phylogenies.html
 
-install packages
 ```{r}
-install.packages("expm")
-install.packages("gee")
-install.packages("igraph")
-install.packages("ape")
+R.version
 ```
 
-Load packages 
 ```{r}
-library(ggplot2)
-library(Rcpp)
-library(expm)
-library(gee)
-library(igraph)
+library(ape)
+library(fastmatch)
+library(quadprog)
+library(phangorn)
+library(phytools)
+library(geiger)
+```
+
+```{r}
+packageVersion("ape")
+```
+```{r}
+## load ape
 library(ape)
 ```
 
 ```{r}
-MyTree <- read.tree("BEAST.tre")
-##Error in if (all(phy$node.label == "")) phy$node.label <- NULL : missing value where TRUE/FALSE needed
-```
-
-
-use rdryad to download tree directly from dryad into r 
-```{r}
-library(rdryad)
-?rdryad
+## read tree from string
+text.string<-
+    "(((((((cow, pig),whale),(bat,(lemur,human))),(robin,iguana)),coelacanth),gold_fish),shark);"
+vert.tree<-read.tree(text=text.string)
 ```
 
 ```{r}
-install.packages("crul")
-install.packages("curl")
-install.packages("tibble")
-install.packages("hoardr")
-install.packages("zip")
-install.packages("jsonlite")
-install.packages("mime")
+plot(vert.tree,no.margin=TRUE,edge.width=2)
+```
+```{r}
+## load phytools
+library(phytools)
 ```
 
 ```{r}
-library(crul)
-library(curl) 
-library(tibble)
-library(hoardr)
-library(zip) 
-library(jsonlite) 
-library(mime)
+roundPhylogram(vert.tree)
+```
+```{r}
+plot(unroot(vert.tree),type="unrooted",no.margin=TRUE,lab4ut="axial",
+    edge.width=2)
+```
+```{r}
+vert.tree
+```
+```{r}
+?read.tree
+NJst.tree<-read.nexus(file="NJst.tre")
+NJst.tree
+```
+```{r}
+?plotTree
+plotTree(NJst.tree,ftype="i",fsize=0.6,lwd=2)
+```
+```{r}
+plot(NJst.tree,no.margin=FALSE,edge.width=0.5)
+```
+```{r}
+Ntip(NJst.tree) ##66 species in this tree
+```
+
+```{r}
+plot(unroot(NJst.tree),type="unrooted",cex=0.6,
+    use.edge.length=FALSE,lab4ut="axial",
+    no.margin=TRUE)
+##unrooted tree 
+```
+```{r}
+plotTree(NJst.tree,type="fan",fsize=0.7,lwd=2,
+    ftype="i") ##how do we make the tree branches bigger??
+```
+```{r}
+##all the species names 
+NJst.tree$tip.label
+```
+
+```{r}
+##add an arrow on a specific branch tip 
+plotTree(NJst.tree,type="fan",fsize=0.7,lwd=1,
+    ftype="i")
+add.arrow(NJst.tree,tip="A_saundersii_saundersii",arrl=1)
+```
+
+
