@@ -9,11 +9,49 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Packages
+
+>For starters, you will need to install [{ape}](https://www.rdocumentation.org/packages/ape/versions/5.5), [{phytools}](https://www.rdocumentation.org/packages/phytools/versions/0.7-90)
+
+## Objectives
+
 ## Introduction 
 
-- what is a phylogenetic tree and why do we compare them to morphological trees
-- package download and description
+Evolutionary biologists study the ways organisms change over time. This is often done by comparing several species to one another and analyzing the differences between them. These differences can then be used to build a graphical representation of species’ relationships to one another, called a phylogenetic tree. Originally, these trees were constructed based solely on organism morphology using shared derived traits, or synapomorphies, often in the form of character matrices. By focusing on these physical traits, biologists could hypothesize different life histories, like species divergence or common descent. However, using morphological data to determine taxonomic relationships is not foolproof. Some shared, analogous traits may be due to convergent evolution. Homoplasy can be difficult to detect through morphological analysis alone, and has historically resulted in phylogenetic trees that have since been disproved through the use of molecular data.
+	
+Modern biologists can now build phylogenetic trees based on the DNA of the organisms in question. By focusing on a few specific genes, evolutionary relationships can be hypothesized with greater accuracy. Examining the polymorphism at different loci can provide information on how distantly related organisms are to one another, and can reduce errors commonly associated with comparing or identifying cryptic species. Molecular data can help resolve unclear phylogenies that were created before genomic methods were available. Biologists can now revisit unresolved trees built from morphological data and revise them using DNA, allowing us to better hypothesize evolutionary relationships.
+	
+In order to assess any changes between these hypothesized evolutionary relationships, we can compare the topologies of phylogenetic trees. The topology refers to the branching pattern displayed, which represents the measure of relatedness among taxa. To understand the importance of topology, we must familiarize ourselves with the anatomy of a phylogenetic tree.  
 
-## Objective
+Anatomy of a tree: 
 
-## 
+![__Why would we compare tree topologies?__](https://media.springernature.com/full/springer-static/image/art%3A10.1007%2Fs12052-008-0035-x/MediaObjects/12052_2008_35_Fig2_HTML.gif?as=webp)
+
+## Methods
+
+There are several different ways to estimate phylogenies, each with their own strengths, weaknesses, and appropriate situations in which to apply them. While we won’t go over them in detail, familiarize yourselves by looking at [Module 24](https://fuzzyatelin.github.io/bioanth-stats/module-24/module-24.html)  
+There are MANY different phylogenetics software that we can use to employ these methods of estimation, but some of the most common are PAUP, BEAST, MrBayes, and PHYLIP. These can take genetic data (alignments) in the form of fastq files, fasta files, or NEXUS files.  
+
+_Types of tree formats: Newick, NEXUS_  
+
+There are several different formats that a graphical tree can be built from.  
+_Newick_: A collection of data formatted using specific syntax that includes parentheses, commas, and semicolons to delineate weight, time, and evolutionary distance. “Newick files are simply text files that consist of one or more tree descriptions in the Newick notation. In contrast to Nexus files they contain no further syntax elements or other information than the trees.”
+
+### Comparing Trees
+
+We will be comparing two graphical hypotheses of the genus _adelpha_, a group of butterflies.
+![image](https://onlinelibrary.wiley.com/cms/asset/1d72eca6-ecb9-4b23-8230-868514c2fa01/mec13168-fig-0001-m.jpg)
+
+One tree is morphologically based, from Keith Wilmott’s 2003 paper [“Cladistic analysis of the Neotropical butterfly genus Adelpha (Lepidoptera: Nymphalidae), with comments on the subtribal classification of Limenitidini.”](https://onlinelibrary.wiley.com/doi/abs/10.1046/j.1365-3113.2003.00209.x) Our molecular tree is from Emily Ebel’s 2015 paper [“Rapid diversification associated with ecological specialization in Neotropical Adelpha butterflies.”](https://onlinelibrary.wiley.com/doi/10.1111/mec.13168)
+
+### Steps
+
+1. __Load the tree files into R__ 
+  - Morphological data is in a NEXUS (.nex) file, and molecular data is in a .tre file in Newick format.
+  - Adjust and manipulate tree using ggtree package to make graphics more readable
+
+2. __Comparing Trees__  
+  - Check to see if the trees are equal using all.equal(morphtree, moleculartreel) phytools package
+
+## Morphological Trees
+
