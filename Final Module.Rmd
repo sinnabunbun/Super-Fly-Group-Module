@@ -2,12 +2,21 @@
 title: "Final Module"
 author: "Group Cool"
 date: "11/5/2021"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    css: bootstrap.css
+    number_sections: TRUE
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# Phylogentic Tree Comparison
+
+<p class="text-primary">In our module we want to break down phylogentic tress and understand how R coding can help us compare them.</p>
 
 ## Packages
 
@@ -15,26 +24,35 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Objectives
 
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+Objectives
+
+</div>
+
 ## Introduction 
 
-Evolutionary biologists study the ways organisms change over time. This is often done by comparing several species to one another and analyzing the differences between them. These differences can then be used to build a graphical representation of species’ relationships to one another, called a phylogenetic tree. Originally, these trees were constructed based solely on organism morphology using shared derived traits, or synapomorphies, often in the form of character matrices. By focusing on these physical traits, biologists could hypothesize different life histories, like species divergence or common descent. However, using morphological data to determine taxonomic relationships is not foolproof. Some shared, analogous traits may be due to convergent evolution. Homoplasy can be difficult to detect through morphological analysis alone, and has historically resulted in phylogenetic trees that have since been disproved through the use of molecular data.
+Evolutionary biologists study the ways organisms change over time. This is often done by comparing several species to one another and analyzing the differences between them. These differences can then be used to build a graphical representation of species’ relationships to one another, called a phylogenetic tree. Originally, these trees were constructed based solely on organism morphology using shared derived traits, or __synapomorphies__, often in the form of character matrices. By focusing on these physical traits, biologists could hypothesize different life histories, like species divergence or common descent. However, using morphological data to determine taxonomic relationships is not foolproof. Some shared, analogous traits may be due to convergent evolution. Homoplasy can be difficult to detect through morphological analysis alone, and has historically resulted in phylogenetic trees that have since been disproved through the use of molecular data.
 	
 Modern biologists can now build phylogenetic trees based on the DNA of the organisms in question. By focusing on a few specific genes, evolutionary relationships can be hypothesized with greater accuracy. Examining the polymorphism at different loci can provide information on how distantly related organisms are to one another, and can reduce errors commonly associated with comparing or identifying cryptic species. Molecular data can help resolve unclear phylogenies that were created before genomic methods were available. Biologists can now revisit unresolved trees built from morphological data and revise them using DNA, allowing us to better hypothesize evolutionary relationships.
 	
-In order to assess any changes between these hypothesized evolutionary relationships, we can compare the topologies of phylogenetic trees. The topology refers to the branching pattern displayed, which represents the measure of relatedness among taxa. To understand the importance of topology, we must familiarize ourselves with the anatomy of a phylogenetic tree.  
+In order to assess any changes between these hypothesized evolutionary relationships, we can compare the topologies of phylogenetic trees. The topology refers to the branching pattern displayed, which represents the measure of relatedness among taxa. To understand the importance of topology, we must familiarize ourselves with the anatomy of a phylogenetic tree. 
 
-Anatomy of a tree: 
+<h4><p class="text-primary">Anatomy of a tree:</p></h4> 
 
 ![__Why would we compare tree topologies?__](https://media.springernature.com/full/springer-static/image/art%3A10.1007%2Fs12052-008-0035-x/MediaObjects/12052_2008_35_Fig2_HTML.gif?as=webp)
 
 ## Methods
 
-There are several different ways to estimate phylogenies, each with their own strengths, weaknesses, and appropriate situations in which to apply them. While we won’t go over them in detail, familiarize yourselves by looking at [Module 24](https://fuzzyatelin.github.io/bioanth-stats/module-24/module-24.html)  
+There are several different ways to estimate phylogenies, each with their own strengths, weaknesses, and appropriate situations in which to apply them. While we won’t go over them in detail, familiarize yourselves by looking at <a href="https://fuzzyatelin.github.io/bioanth-stats/module-24/module-24.html)">Module 24</a>  
 There are MANY different phylogenetics software that we can use to employ these methods of estimation, but some of the most common are PAUP, BEAST, MrBayes, and PHYLIP. These can take genetic data (alignments) in the form of fastq files, fasta files, or NEXUS files.  
 
-_Types of tree formats: Newick, NEXUS_  
+<h4><p class="text-primary">Types of Tree Formats: Newick, Nexus</p></h4>
 
-There are several different formats that a graphical tree can be built from.  
+There are several different formats that a graphical tree can be built from.    
 _Newick_: A collection of data formatted using specific syntax that includes parentheses, commas, and semicolons to delineate weight, time, and evolutionary distance. “Newick files are simply text files that consist of one or more tree descriptions in the Newick notation. In contrast to Nexus files they contain no further syntax elements or other information than the trees.”
 
 ### Comparing Trees
@@ -46,11 +64,11 @@ One tree is morphologically based, from Keith Wilmott’s 2003 paper [“Cladist
 
 ### Steps
 
-1. __Load the tree files into R__ 
+1. <p class="text-primary">__Load the tree files into R__</p> 
   - Morphological data is in a NEXUS (.nex) file, and molecular data is in a .tre file in Newick format.
   - Adjust and manipulate tree using ggtree package to make graphics more readable
 
-2. __Comparing Trees__  
+2. <p class="text-primary">__Comparing Trees__</p>  
   - Check to see if the trees are equal using all.equal(morphtree, moleculartreel) phytools package
 
 ## Morphological Trees
