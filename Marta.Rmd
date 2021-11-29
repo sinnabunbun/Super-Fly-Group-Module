@@ -22,3 +22,13 @@ install.packages("phangorn")
 install.packages("phytools")
 install.packages("geiger")
 ```
+
+```{r nex}
+nex.tree<-read.nexus.data(file="matrix_from_app2_xl_file.nex")
+nexus2DNAbin(nex.tree)
+plot.phylo(nex.tree)
+```
+ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh ok i'm sleeping now but i think the answer is converting this xl file to readable tre
+```{r}
+as.phylo.formula(~Order/Family/Genus/Species, data =  (file="matrix_from_app2_xl_file.nex"))
+```

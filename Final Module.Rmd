@@ -62,14 +62,44 @@ We will be comparing two graphical hypotheses of the genus _adelpha_, a group of
 
 One tree is morphologically based, from Keith Wilmott’s 2003 paper [“Cladistic analysis of the Neotropical butterfly genus Adelpha (Lepidoptera: Nymphalidae), with comments on the subtribal classification of Limenitidini.”](https://onlinelibrary.wiley.com/doi/abs/10.1046/j.1365-3113.2003.00209.x) Our molecular tree is from Emily Ebel’s 2015 paper [“Rapid diversification associated with ecological specialization in Neotropical Adelpha butterflies.”](https://onlinelibrary.wiley.com/doi/10.1111/mec.13168)
 
+### Example
+
+To start off, we want to understand how a tree is created. For his example we will be making our own tree using Newick format.
+
+Here is a great explanation of Newick format: __"Put simply, monophyletic clades are surrounded by parentheses and sister clades are separated by commas. For example, a simple tree could be written as (((A,B),C),(D,E))."__ Let's try making that!
+
+```{r set-up}
+library(ape)#loading in ape
+text.string<-
+    "(((A,B),C),(D,E));"
+example.tree<-read.tree(text=text.string)#this command reads trees in Newick format like we did above
+plot(example.tree,no.margin=TRUE,edge.width=2) 
+```  
+Looks good! Now we can try it out with some actual animals
+
+```{r animals}
+text.string<-
+    "(((((((cow, pig),whale),(bat,(lemur,human))),(robin,iguana)),coelacanth),gold_fish),shark);"
+vert.tree<-read.tree(text=text.string)
+plot(vert.tree,no.margin=TRUE,edge.width=2)
+```  
+
 ### Steps
 
 1. <p class="text-primary">__Load the tree files into R__</p> 
   - Morphological data is in a NEXUS (.nex) file, and molecular data is in a .tre file in Newick format.
-  - Adjust and manipulate tree using ggtree package to make graphics more readable
+  
+2. <p class="text-primary">Adjust and manipulate tree using ggtree package to make graphics more readable</p>
 
-2. <p class="text-primary">__Comparing Trees__</p>  
+3. <p class="text-primary">__Comparing Trees__</p>  
   - Check to see if the trees are equal using all.equal(morphtree, moleculartreel) phytools package
 
-## Morphological Trees
+## Morphological Tree
+
+```{r NJst Tree}
+NJst.tree<-read.nexus(file="NJst.tre")
+NJst.tree
+```
+
+## Molecular Tree
 
