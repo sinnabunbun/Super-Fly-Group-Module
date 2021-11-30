@@ -23,6 +23,15 @@ install.packages("phytools")
 install.packages("geiger")
 ```
 
+```{r}
+library(ape)
+library(fastmatch)
+library(quadprog)
+library(phangorn)
+library(phytools)
+library(geiger)
+```
+
 ```{r nex}
 nex.tree<-read.nexus.data(file="matrix_from_app2_xl_file.nex")
 nexus2DNAbin(nex.tree)
