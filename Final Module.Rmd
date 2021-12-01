@@ -12,6 +12,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(ape)
+library(phytools)
 ```
 
 # Phylogentic Tree Comparison
@@ -122,7 +124,7 @@ plotTree(whale.tree,type="fan",fsize=0.7,lwd=1,
 ```
 
 
-### Steps
+### Method
 
 1. <p class="text-primary">__Load the tree files into R__</p> 
   - Morphological data is in a NEXUS (.nex) file, and molecular data is in a .tre file in Newick format.
@@ -132,10 +134,13 @@ plotTree(whale.tree,type="fan",fsize=0.7,lwd=1,
 3. <p class="text-primary">__Comparing Trees__</p>  
   - Check to see if the trees are equal using all.equal(morphtree, moleculartreel) phytools package
 
-## Molecular Tree
+## Loading the Tree Files
+
+### Molecular Tree
+
 Now that we are a little more comfortable working with phylogenetic trees in R, we can load our first tree! 
 
-First, Use this link ("https://github.com/sinnabunbun/Super-Fly-Group-Module") to go to the Super Fly Group Module repo. From there, click on the "NJst.tre" file. Copy this data using the little pencil icon. Then go to your own working repo, select the "Create New File" option and paste the tree data into that file. 
+First, Use this link ("https://github.com/sinnabunbun/Super-Fly-Group-Module") to go to the Super Fly Group Module repo. From there, click on the "NJst.tre" file. Copy this data using the little pencil icon. Then go to your own working repo, select the "Create New File" option and paste the tree data into that file.  
 
 Once you have the tree file saved in your repo, you can load the tree into your R markdown file using the "read.nexus" command 
 ```{r}
@@ -181,7 +186,7 @@ add.arrow(mol.tree,tip="A_saundersii_saundersii",arrl=1)
 ```
 
 
-## Morphological Tree
+### Morphological Tree
 
 We will follow a similar process as with the molecular tree  to get the morphological tree loaded into our R markdown file. Go to the Super Fly Group Module repo, copy the data from "matrix_from_app2_xl_file.nex" and save it as a file in your working repo. 
 
@@ -193,7 +198,7 @@ as_phydat
 summary(as_phydat)
 raw_data <- ReadCharacters("matrix_from_app2_xl_file.nex")
 raw_data
-my_data <- MatrixToPhyDat(raw_data)#i think these are important
+my_data <- MatrixToPhyDat(raw_data)
 my_data
 ```
 
@@ -217,3 +222,12 @@ or an unrooted tree
 morph.tree3 <- plot(tree, "unrooted", main="Morphological Tree")
 morph.tree3
 ```
+
+## GGTree
+
+```{r, include=FALSE}
+install.packages("ggtree")
+library(ggtree)
+```
+
+## Comparison
