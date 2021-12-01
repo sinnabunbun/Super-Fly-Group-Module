@@ -225,9 +225,27 @@ morph.tree3
 
 ## GGTree
 
+https://guangchuangyu.github.io/ggtree-book/chapter-ggtree.html#fig:viewClade
+
 ```{r, include=FALSE}
-install.packages("ggtree")
+ if (!requireNamespace("BiocManager", quietly = TRUE))
++     install.packages("BiocManager")
+ BiocManager::install("ggtree")
 library(ggtree)
+```
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+p<- ggplot(mol.tree) + geom_tree() + theme_tree() + geom_tiplab()
+p2 <- p %>% collapse(node=21) + 
+  geom_point2(aes(subset=(node==21)), shape=21, size=5, fill='green')
+p2 <- collapse(p2, node=23) + 
+  geom_point2(aes(subset=(node==23)), shape=23, size=5, fill='red')
+print(p2)
+expand(p2, node=23) %>% expand(node=21)
 ```
 
 ## Comparison
