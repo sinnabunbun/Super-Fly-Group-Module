@@ -272,8 +272,14 @@ morph_tree_3 <- read.nexus.data(file = "matrix_from_app2_xl_file.nex")
 
 morphotree <- plot(morph_tree_3, "phylogram", main="morph_tree_3")
 morphotree
+
 ```
-#Comparing trees
+#Converting object in class list to object class phylo
 ```{r}
-as.phylo(morph_tree_3)
+class(morph_tree_3)
+morph.tree.phylo <- as.phylo.phylog(morph_tree_3)
+morph.tree.phylo
+
+as.phylo.phylog(morph_tree_3)
+as.multiPhylo.list(morph_tree_3)
 ```
