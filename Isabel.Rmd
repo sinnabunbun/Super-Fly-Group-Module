@@ -265,3 +265,11 @@ expand(p2, node=23) %>% expand(node=21)
 ```
 
 ## Comparison
+
+#Loading morph tree
+```{r}
+morph_tree_3 <- read.nexus.data(file = "matrix_from_app2_xl_file.nex")
+
+morphotree <- plot(tree, "phylogram", main="morph_tree_3")
+morphotree
+```
