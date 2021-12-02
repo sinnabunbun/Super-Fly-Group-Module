@@ -277,9 +277,9 @@ morphotree
 #Converting object in class list to object class phylo
 ```{r}
 class(morph_tree_3)
-morph.tree.phylo <- as.phylo.phylog(morph_tree_3)
+
 morph.tree.phylo
 
-as.phylo.phylog(morph_tree_3)
 as.multiPhylo.list(morph_tree_3)
+set_class(morph_tree_3, class=phylo)
 ```
