@@ -200,6 +200,12 @@ raw_data <- ReadCharacters("matrix_from_app2_xl_file.nex")
 raw_data
 my_data <- MatrixToPhyDat(raw_data)
 my_data
+
+#Isabel's:
+morph_tree_3 <- read.nexus.data(file = "matrix_from_app2_xl_file.nex")
+
+morphotree <- plot(tree, "phylogram", main="morph_tree_3")
+morphotree
 ```
 
 Once we have the data written in a format that can be read by R, we can use the function "dist.ml" from the package ape to compute distances. Once we've done that, we can write a phylogenetic tree using Neighbor Joining (NJ) methods and plot it as a phylogram 
