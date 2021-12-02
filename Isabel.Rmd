@@ -255,7 +255,7 @@ library(ggplot2)
 ```
 
 ```{r}
-p<- ggplot(mol.tree) + geom_tree() + theme_tree() + geom_tiplab()
+p<- ggtree(mol.tree) + geom_tree() + theme_tree() + geom_tiplab()
 p2 <- p %>% collapse(node=21) + 
   geom_point2(aes(subset=(node==21)), shape=21, size=5, fill='green')
 p2 <- collapse(p2, node=23) + 
@@ -270,16 +270,31 @@ expand(p2, node=23) %>% expand(node=21)
 ```{r}
 morph_tree_3 <- read.nexus.data(file = "matrix_from_app2_xl_file.nex")
 
-morphotree <- plot(morph_tree_3, "phylogram", main="morph_tree_3")
-morphotree
 
 ```
 #Converting object in class list to object class phylo
 ```{r}
-class(morph_tree_3)
+class(morph_tree_3) #see what class the object is in
 
-morph.tree.phylo
 
-as.multiPhylo.list(morph_tree_3)
-set_class(morph_tree_3, class=phylo)
+install.packages("phylobase")
+library(phylobase)
+
+morph_tree_3 <- read.nexus.data(file = "matrix_from_app2_xl_file.nex")
+morph <- as.data.frame(morph_tree_3) #putting the morph data in a dataframe
+
+
+example <- read.nexus.splits("matrix_from_app2_xl_file.nex") #trying to read tree as class phylo
+
+
+x <- ~Family/Genus/Species
+as.phylo(x, data = morph_tree_3, collapse = FALSE)
+
+```
+#Comparing
+```{r}
+comparePhylo(morph.tree, mol.tree, plot = FALSE, force.rooted = FALSE,
+             use.edge.length = FALSE)
+
+
 ```
