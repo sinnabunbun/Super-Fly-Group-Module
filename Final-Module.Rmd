@@ -245,6 +245,17 @@ plot(mol.tree, type = "phylogram",  edge.color = "purple", tip.color = "black", 
 add.arrow(mol.tree,tip="A_saundersii_saundersii",arrl=1)
 ```
 
+```{r}
+mol.tree<-read.nexus(file="NJst.tre")
+plot(mol.tree,no.margin=TRUE,edge.width=2)
+nodelabels(text=1:mol.tree$Nnode,node=1:mol.tree$Nnode+Ntip(mol.tree))
+
+
+plot(mol.tree, "fan", main="Molecular Tree", edge.width = 3, edge.color = "pink", show.tip.label = FALSE)
+arc.cladelabels(tree=mol.tree, "Serpa Clade", node = 55, ln.offset=1.02,
+   lab.offset=1.06, cex=1, orientation="curved")
+```
+
 
 #Morphological Tree
 
@@ -269,6 +280,13 @@ morph.tree3 <- plot(morph.tree, "unrooted", main="Morphological Tree")
 morph.tree3
 ```
 
+```{r}
+plot(morph.tree, "fan", main="Morphological Tree", edge.width = 3, edge.color = "pink", show.tip.label = FALSE)
+arc.cladelabels(tree=morph.tree, "Serpa Clade", node = 3, ln.offset=1.02,
+   lab.offset=1.06, cex=1, orientation="curved")
+```
+
+
 #ggtree
 
 
@@ -291,6 +309,24 @@ ggtree(mol.tree, layout="circular") + ggtitle("(Phylogram) circular layout")
 
 ```{r}
 multiplot(ggtree(mol.tree), ggtree(morph.tree), ncol=2, labels=c('Molecular Tree', 'Morphological Tree'))
+```
+
+```{r}
+#Morphological tree plot
+p <- ggtree(morph.tree, color="purple", size=0.5, linetype="dotted")
+p <- p + geom_tiplab(size=2)
+p <- p + geom_cladelabel(node = 3, label="Serpa Clade", align=TRUE, offset=1, angle=90) 
+p
+```
+
+```{r}
+#Molecular tree plot 
+g <- ggtree(mol.tree, color="green", size=0.5, linetype="dotted")
+g <- g + geom_tiplab() 
+g <- g + geom_cladelabel(node=47, label="Serpa", angle = 90, 
+                  color="red2", align=TRUE) 
+g <- g + geom_hilight(node=6, fill="gold")
+g
 ```
 
 
