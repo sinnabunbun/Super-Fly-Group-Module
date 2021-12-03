@@ -372,7 +372,7 @@ prunedplot <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 1.8, l
 plot(prunedplot)
 ```
 
-#Now we can clearly see the associations between these trees and the individuals and how they were rearranged. You can go branch by branch and follow the shaded lines to view where they are on the opposite tree.
+#Now we can clearly see the associations between these trees and the individuals and how they were rearranged. You can go branch by branch and follow the shaded lines to view where they are on the opposite tree. Interestingly, Wilmott's 2003 tree, while based entirely on morphology, successfully delineates between the lowland Adelpha lineages (large top grouping) and the montane lineages (small bottom grouping). Even though this phylogeny is not resolved to the level of the molecular phylogeny, there are apparently sufficient morphological differences between montane and lowland populations. 
 
 
 
