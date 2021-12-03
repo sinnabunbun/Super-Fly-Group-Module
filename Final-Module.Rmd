@@ -332,11 +332,12 @@ g
 
 ## Comparison
 
-First we will use the function all.equal from the APE package. This is a good place to start when comparing trees because it will tell you the basics: are these trees the same? It's a good exploratory function, but after we learn that they are not the same, we have to dig deeper.
+#Now we will get into comparing our morphological tree and our molecular tree. First we will use the function all.equal from the APE package. This is a good place to start when comparing trees because it will tell you the basics: are these trees the same?
 ```{r}            
 all.equal(mol.tree, morph.tree, use.edge.length = TRUE,
                    use.tip.label = TRUE)
 ```
+#It's a good exploratory function, but after we learn that they are not the same, we have to dig deeper.
 
 #Let's see if the trees are ultrametric.
 ```{r}
@@ -356,7 +357,7 @@ comparePhylo(morph.tree, mol.tree, plot = FALSE, force.rooted = FALSE,
 ```
 #The morphological tree is also non-ultrametric. Essentially, both trees have structure and are not one big polytomy, and branch lengths differ, although one phylogeny is more structured than the other. Can you tell which one it is? 
 
-It also tells us that they have different numbers of tips (46 and 66) which makes sense because they aren't looking at the same number of individuals. Naturally because of this, these trees will inherently be different from each other structurally. The morph tree has fewer nodes not only because it's hypothesizing the relationships among fewer individuals, but also because there is more uncertainty. This tree is comb like, and we can interpret this as an unresolved phylogeny. 
+#It also tells us that they have different numbers of tips (46 and 66) which makes sense because they aren't looking at the same number of individuals. Naturally because of this, these trees will inherently be different from each other structurally. The morph tree has fewer nodes not only because it's hypothesizing the relationships among fewer individuals, but also because there is more uncertainty. This tree is comb like, and we can interpret this as an unresolved phylogeny. 
 
 #When both trees are non-ultrametric, the number of analyses that we can perform is limited. Let's explore what more we can learn about these trees.
 
@@ -373,26 +374,9 @@ is.binary(mol.tree)
 is.binary(morph.tree)
 ```
 
-
-
-
-
-
-
-
+#Conclusion?
 
 ###Unsure about the following chunks:
-
-```{r}
-all.equal(mol.tree, morph.tree, use.edge.length = TRUE,
-                   use.tip.label = TRUE)
-```
-
-```{r}
-comparePhylo(mol.tree, morph.tree,  plot = FALSE, force.rooted = FALSE,
-             use.edge.length = FALSE)
-```
-
 
 ```{r}
 set.seed(1)
@@ -409,17 +393,4 @@ association <- cbind(mol.tree$tip.label, morph.tree$tip.label)
 cophyloplot(mol.tree, morph.tree, assoc = association, length.line = 4, space = 28, gap = 3)
 ```
 
-First we will use the function all.equal. This is a good place to start when comparing trees because it will tell you the basics: are these trees the same? It's a good exploratory function, but after we learn that they are not the same, we have to dig deeper.
-<div class = "blue">
-```{r}            
-all.equal(mol.tree, morph.tree, use.edge.length = TRUE,
-                   use.tip.label = TRUE)
-```
 
-Next we'll try comparing phylogenetic tree topographies using the comparePhylo function. This will tell you that both trees are __NOT ultrametric__, which means the tips of each tree are not equally distant from the root of their respective tree. Essentially, both trees have structure and are not one big polytomy. It also tells us that they have different numbers of tips (46 and 66) which makes sense because they aren't looking at the same number of individuals. Naturally because of this, these trees will inherently be different from each other structurally. The morph tree has fewer nodes not only because it's hypothesizing the relationships among fewer individuals, but also because there is more uncertainty. This tree is comb like, and we can interpret this as an unresolved phylogeny.
-<div class = "blue">
-```{r}
-comparePhylo(morph.tree, mol.tree, plot = FALSE, force.rooted = FALSE,
-             use.edge.length = FALSE)
-
-comparePhylo(morph.tree.reduced, mol.tree.reduced, plot = FALSE, force.rooted = FALSE, use.edge.length = FALSE)
