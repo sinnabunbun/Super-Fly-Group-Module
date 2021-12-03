@@ -4,8 +4,6 @@ author: "Abby"
 date: "11/5/2021"
 output: html_document
 ---
-#Exercise 2: Introduction to phylo
-###SOURCE: http://www.phytools.org/Cordoba2017/ex/2/Intro-to-phylogenies.html
 
 ```{r}
 R.version
@@ -21,74 +19,80 @@ library(geiger)
 ```
 
 ```{r}
-packageVersion("ape")
-```
-```{r}
-## load ape
-library(ape)
+mol.tree<-read.nexus(file="NJst.tre")
+mol.tree
+nodelabels(text=1:mol.tree$Nnode,node=1:mol.tree$Nnode+Ntip(mol.tree))
 ```
 
 ```{r}
-## read tree from string
-text.string<-
-    "(((((((cow, pig),whale),(bat,(lemur,human))),(robin,iguana)),coelacanth),gold_fish),shark);"
-vert.tree<-read.tree(text=text.string)
+mol.tree<-read.nexus(file="NJst.tre")
+plot(mol.tree,no.margin=TRUE,edge.width=2)
+nodelabels(text=1:mol.tree$Nnode,node=1:mol.tree$Nnode+Ntip(mol.tree))
+
+
+plot(mol.tree, "fan", main="Molecular Tree", edge.width = 3, edge.color = "pink", show.tip.label = FALSE)
+arc.cladelabels(tree=mol.tree, "Serpa Clade", node = 55, ln.offset=1.02,
+   lab.offset=1.06, cex=1, orientation="curved")
 ```
 
-```{r}
-plot(vert.tree,no.margin=TRUE,edge.width=2)
-```
-```{r}
-## load phytools
-library(phytools)
-```
-
-```{r}
-roundPhylogram(vert.tree)
-```
-```{r}
-plot(unroot(vert.tree),type="unrooted",no.margin=TRUE,lab4ut="axial",
-    edge.width=2)
-```
-```{r}
-vert.tree
-```
-```{r}
-?read.tree
-NJst.tree<-read.nexus(file="NJst.tre")
-NJst.tree
-```
-```{r}
-?plotTree
-plotTree(NJst.tree,ftype="i",fsize=0.6,lwd=2)
-```
-```{r}
-plot(NJst.tree,no.margin=FALSE,edge.width=0.5)
-```
-```{r}
-Ntip(NJst.tree) ##66 species in this tree
-```
-
-```{r}
-plot(unroot(NJst.tree),type="unrooted",cex=0.6,
-    use.edge.length=FALSE,lab4ut="axial",
-    no.margin=TRUE)
-##unrooted tree 
-```
-```{r}
-plotTree(NJst.tree,type="fan",fsize=0.7,lwd=2,
-    ftype="i") ##how do we make the tree branches bigger??
-```
 ```{r}
 ##all the species names 
-NJst.tree$tip.label
+mol.tree$tip.label
 ```
 
 ```{r}
-##add an arrow on a specific branch tip 
-plotTree(NJst.tree,type="fan",fsize=0.7,lwd=1,
-    ftype="i")
-add.arrow(NJst.tree,tip="A_saundersii_saundersii",arrl=1)
+library('stringr') 
+species <- mol.tree$tip.label
+string <- paste(species, collapse= "")
+string
+str_split(species,",", simplify= TRUE)
+
+```
+
+```{r}
+text.string<-
+    "((((humpback wahle, fin whale), (Antarctic minke whale, common minke whale)), bowhead whale), sperm whale);"
+```
+
+```{r}
+string <- "((A. alala negra, A. corcyra aretina, A. tracta, A. pithys, A. donysa donysa), ((A. serpacelerio, A. seriphiaaquillia, A. seriphiatherasia), (A. melonaleucocoma, A. salmoneus colada, A. cythereacytherea, A. cythereadaguana, A. epioneagilla, A. etheldaethelda, A. thessaliathessalia, A. iphicleolathessalita, A. iphiclusiphiclus, A. shuara, A. plesaurephliassa, A. basiloides, A. atticaattica, A. leucerioides, A. saundersiisaundersii, A. boreasboreas, A. rothschildi, A. sichaeus, A. cocalacocala, A. leucophthalmairminella, A. irminatumida, A. pollina, A. lycoriaslara, A. lycoriasspruceana, A. erotia erotia, A. mesentina, A. phylaca pseudaethalia, A. capucinus capucinus, A. heraclea heraclea, A. naxia naxia, A. justina valentina, A. olynthia, A. jordani, A. zinazina, A. zinairma, A. delinita delinita, A. boeotia boeotia, A. maleaaethalia)));"
+
+morph.tree<-read.tree(text=string)
+plot(morph.tree,no.margin=TRUE,edge.width=2)
+nodelabels(text=1:morph.tree$Nnode,node=1:morph.tree$Nnode+Ntip(morph.tree))
+
+plot(morph.tree, "fan", main="Morphological Tree", edge.width = 3, edge.color = "pink", show.tip.label = FALSE)
+arc.cladelabels(tree=morph.tree, "Serpa Clade", node = 3, ln.offset=1.02,
+   lab.offset=1.06, cex=1, orientation="curved")
+```
+```{r}
+#Morphological tree plot
+p <- ggtree(morph.tree, color="purple", size=0.5, linetype="dotted")
+p <- p + geom_tiplab(size=2)
+p <- p + geom_cladelabel(node = 3, label="Serpa Clade", align=TRUE, offset=1, angle=90) 
+p
+```
+
+```{r}
+#Molecular tree plot 
+g <- ggtree(mol.tree, color="green", size=0.5, linetype="dotted")
+g <- g + geom_tiplab() 
+g <- g + geom_cladelabel(node=47, label="Serpa", angle = 90, 
+                  color="red2", align=TRUE) 
+g <- g + geom_hilight(node=6, fill="gold")
+g
 ```
 
 
+
+```{r}
+library("gridExtra")
+grid.arrange(ggtree(tree) + ggtitle("(Phylogram) rectangular layout"),
+             ggtree(tree, branch.length='none') + ggtitle("(Cladogram) rectangular layout"),
+         ggtree(tree, layout="slanted") + ggtitle("(Phylogram) slanted layout"),
+             ggtree(tree, layout="slanted", branch.length='none') + ggtitle("(Cladogram) slanted layout"),
+         ggtree(tree, layout="circular") + ggtitle("(Phylogram) circular layout"),
+             ggtree(tree, layout="circular", branch.length="none") + ggtitle("(Cladogram) circular layout"),
+         ggtree(tree, layout="unrooted") + ggtitle("unrooted layout"),
+         ncol=2)
+```
