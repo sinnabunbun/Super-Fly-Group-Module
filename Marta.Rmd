@@ -61,4 +61,10 @@ my_data <- MatrixToPhyDat(raw_data)#i think these are important
 
 ```{r}
 read.nexus.data("matrix_from_app2_xl_file.nex")
+raw_data <- ReadCharacters("matrix_from_app2_xl_file.nex")
+my_data <- MatrixToPhyDat(raw_data)
+```
+
+```{r}
+PhyToString(my_data)
 ```

@@ -1,7 +1,6 @@
 ---
-title: "Final Module"
-author: "Group Cool"
-date: "11/5/2021"
+title: "Creating and Comparing Phylogenetic Trees in R"
+author: "Abby, Isabel, Marta, Nirmiti"
 output: 
   html_document:
     toc: true
@@ -26,14 +25,12 @@ library(phytools)
 
 ## Objectives
 
-<style>
-div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
-</style>
-<div class = "blue">
+In this module we will teach you how to:  
+- Create trees and understand phylogenetic trees  
+- Upload and forma data into trees  
+- Modify trees using R packages  
+- And compare morphological and molecular trees  
 
-Objectives
-
-</div>
 
 ## Introduction 
 
@@ -52,10 +49,9 @@ In order to assess any changes between these hypothesized evolutionary relations
 There are several different ways to estimate phylogenies, each with their own strengths, weaknesses, and appropriate situations in which to apply them. While we won’t go over them in detail, familiarize yourselves by looking at <a href="https://fuzzyatelin.github.io/bioanth-stats/module-24/module-24.html)">Module 24</a>  
 There are MANY different phylogenetics software that we can use to employ these methods of estimation, but some of the most common are PAUP, BEAST, MrBayes, and PHYLIP. These can take genetic data (alignments) in the form of fastq files, fasta files, or NEXUS files.  
 
-<h4><p class="text-primary">Types of Tree Formats: Newick, Nexus</p></h4>
 
 There are several different formats that a graphical tree can be built from.    
-_Newick_: A collection of data formatted using specific syntax that includes parentheses, commas, and semicolons to delineate weight, time, and evolutionary distance. “Newick files are simply text files that consist of one or more tree descriptions in the Newick notation. In contrast to Nexus files they contain no further syntax elements or other information than the trees.”
+__Newick__: A collection of data formatted using specific syntax that includes parentheses, commas, and semicolons to delineate weight, time, and evolutionary distance. “Newick files are simply text files that consist of one or more tree descriptions in the Newick notation. In contrast to Nexus files they contain no further syntax elements or other information than the trees.”
 
 ### Comparing Trees
 
@@ -68,7 +64,7 @@ One tree is morphologically based, from Keith Wilmott’s 2003 paper [“Cladist
 
 To start off, we want to understand how a tree is created. For this example we will be making our own tree using Newick format.
 
-Here is a great explanation of Newick format: __"Put simply, monophyletic clades are surrounded by parentheses and sister clades are separated by commas. For example, a simple tree could be written as (((A,B),C),(D,E))."__ Let's try making that!
+Here is a great explanation of Newick format: [__"Put simply, monophyletic clades are surrounded by parentheses and sister clades are separated by commas. For example, a simple tree could be written as (((A,B),C),(D,E))."__](http://ib.berkeley.edu/courses/ib200/2016/labs/02/lab02.pdf) Let's try making that!
 
 You can check that you have the most up-to-date version of R by running the command "R.Version"
 ```{r}
@@ -98,7 +94,7 @@ example.tree<-read.tree(text=text.string)#this command reads trees in Newick for
 plot(example.tree,no.margin=TRUE,edge.width=2) 
 ```  
 
-Looks good! Now we can try it plotting a clade of whale species 
+Looks good! Now we can try it plotting a clade of whale species: 
 
 ```{r animals}
 text.string<-
@@ -106,6 +102,8 @@ text.string<-
 whale.tree<-read.tree(text=text.string)
 plot(whale.tree,no.margin=TRUE,edge.width=2)
 ``` 
+
+![We love to see it!](/Users/hamme/Documents/R/Super-Fly-Group-Module/image.png)
 
 There are many different commands that will allow you to visualize your tree in many different ways. Let's try a few! 
 
@@ -124,17 +122,15 @@ plotTree(whale.tree,type="fan",fsize=0.7,lwd=1,
 ```
 
 
-### Method
+### Steps
 
 1. <p class="text-primary">__Load the tree files into R__</p> 
   - Morphological data is in a NEXUS (.nex) file, and molecular data is in a .tre file in Newick format.
   
-2. <p class="text-primary">Adjust and manipulate tree using ggtree package to make graphics more readable</p>
+2. <p class="text-primary">__Adjust and manipulate tree using ggtree package to make graphics more readable__</p>
 
 3. <p class="text-primary">__Comparing Trees__</p>  
   - Check to see if the trees are equal using all.equal(morphtree, moleculartreel) phytools package
-
-## Loading the Tree Files
 
 ### Molecular Tree
 
@@ -166,7 +162,7 @@ plot(unroot(mol.tree),type="unrooted",cex=0.6,
 ##unrooted tree 
 ```
 
-we can also make a fan tree 
+We can also make a fan tree 
 ```{r}
 plotTree(mol.tree,type="fan",fsize=0.7,lwd=2,
     ftype="i") 
@@ -232,24 +228,26 @@ g
 ```
 
 ```{r}
-ggtree(mol.tree, layout="circular") + ggtitle("(Phylogram) circular layout")
+ggtree(mol.tree, layout="circular") + ggtitle("(Phylogram) circular layout") + geom_tiplab(size=2)
 ```
 
 ```{r}
-multiplot(ggtree(mol.tree), ggtree(morph.tree), ncol=2, labels=c('Molecular Tree', 'Morphological Tree'))
+multiplot(ggtree(mol.tree) + geom_tiplab(size=2), ggtree(morph.tree) + geom_tiplab(size=2), ncol=2, labels=c('Molecular Tree', 'Morphological Tree'))
 ```
 
 
 ## Comparison
 
-#First we will use the function all.equal. This is a good place to start when comparing trees because it will tell you the basics: are these trees the same? It's a good exploratory function, but after we learn that they are not the same, we have to dig deeper.
+First we will use the function all.equal. This is a good place to start when comparing trees because it will tell you the basics: are these trees the same? It's a good exploratory function, but after we learn that they are not the same, we have to dig deeper.
 ```{r}             
 all.equal(mol.tree, morph.tree, use.edge.length = TRUE,
                    use.tip.label = TRUE)
 ```
 
-##Comparing phylogenetic tree topographies using the comparePhylo function. This will tell you that both trees are NOT ultrametric, which means the tips of each tree are not equally distant from the root of their respective tree. Essentially, both trees have structure and are not one big polytomy. It also tells us that they have different numbers of tips (46 and 66) which makes sense because they aren't looking at the same number of individuals. Naturally because of this, these trees will inherently be different from each other structurally. The morph tree has fewer nodes not only because it's hypothesizing the relationships among fewer individuals, but also because there is more uncertainty. This tree is comblike, and we can interpret this as an unresolved phylogeny.
+Next we'll try comparing phylogenetic tree topographies using the comparePhylo function. This will tell you that both trees are __NOT ultrametric__, which means the tips of each tree are not equally distant from the root of their respective tree. Essentially, both trees have structure and are not one big polytomy. It also tells us that they have different numbers of tips (46 and 66) which makes sense because they aren't looking at the same number of individuals. Naturally because of this, these trees will inherently be different from each other structurally. The morph tree has fewer nodes not only because it's hypothesizing the relationships among fewer individuals, but also because there is more uncertainty. This tree is comblike, and we can interpret this as an unresolved phylogeny.
 ```{r}
 comparePhylo(morph.tree, mol.tree, plot = FALSE, force.rooted = FALSE,
              use.edge.length = FALSE)
 ```
+
+This serves to illustrate the importance of molecular data. Incomplete and outdated trees like our morphological example are very difficult to not only manipulate but compare, which makes it hard to run statistical analysis on the differences between he two rees.
