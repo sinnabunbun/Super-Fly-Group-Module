@@ -289,44 +289,27 @@ arc.cladelabels(tree=morph.tree, "Serpa Clade", node = 3, ln.offset=1.02,
 
 #ggtree
 
-
-```{r}
-g <- ggtree(mol.tree, color="steelblue", size=0.5, linetype="dotted")
-g <- g + geom_tiplab(size=2)
-g
-```
-
-
-```{r}
-g <- ggtree(morph.tree, color="steelblue", size=0.5, linetype="dotted")
-g <- g + geom_tiplab(size=2)
-g
-```
-
-```{r}
-ggtree(mol.tree, layout="circular") + ggtitle("(Phylogram) circular layout")
-```
-
-```{r}
-multiplot(ggtree(mol.tree), ggtree(morph.tree), ncol=2, labels=c('Molecular Tree', 'Morphological Tree'))
-```
-
 ```{r}
 #Morphological tree plot
-p <- ggtree(morph.tree, color="purple", size=0.5, linetype="dotted")
+library(ggtree)
+p <- ggtree(morph.tree, color="purple", size=0.5)
 p <- p + geom_tiplab(size=2)
-p <- p + geom_cladelabel(node = 3, label="Serpa Clade", align=TRUE, offset=1, angle=90) 
 p
 ```
 
 ```{r}
 #Molecular tree plot 
-g <- ggtree(mol.tree, color="green", size=0.5, linetype="dotted")
-g <- g + geom_tiplab() 
-g <- g + geom_cladelabel(node=47, label="Serpa", angle = 90, 
-                  color="red2", align=TRUE) 
-g <- g + geom_hilight(node=6, fill="gold")
+g <- ggtree(mol.tree, color="green", size=0.5)
+g <- g + geom_tiplab(size=2)
 g
+```
+
+```{r}
+library("gridExtra")
+grid.arrange(
+    ggtree(mol.tree, color="red") + theme_tree("steelblue"),
+    ggtree(morph.tree, color="white") + theme_tree("black"),
+    ncol=2)
 ```
 
 
