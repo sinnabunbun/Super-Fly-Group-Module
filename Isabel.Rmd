@@ -312,11 +312,14 @@ all.equal(mol.tree, morph.tree, use.edge.length = TRUE,
                    use.tip.label = TRUE)
 ```
 
-Next we'll try comparing phylogenetic tree topographies using the comparePhylo function. This will tell you that both trees are __NOT ultrametric__, which means the tips of each tree are not equally distant from the root of their respective tree. Essentially, both trees have structure and are not one big polytomy. It also tells us that they have different numbers of tips (46 and 66) which makes sense because they aren't looking at the same number of individuals. Naturally because of this, these trees will inherently be different from each other structurally. The morph tree has fewer nodes not only because it's hypothesizing the relationships among fewer individuals, but also because there is more uncertainty. This tree is comb like, and we can interpret this as an unresolved phylogeny.
-<div class = "blue">
+Next we'll try comparing phylogenetic tree topographies using the comparePhylo function. This will tell you that both trees are __NOT ultrametric__, which means the tips of each tree are not equally distant from the root of their respective tree. Essentially, both trees have structure and are not one big polytomy. It also tells us that they have different numbers of tips (46 and 66) which makes sense because they aren't looking at the same number of individuals. Naturally because of this, these trees will inherently be different from each other structurally. The morph tree has fewer nodes not only because it's hypothesizing the relationships among fewer individuals, but also because there is more uncertainty. This tree is comb like, and we can interpret this as an unresolved phylogeny. 
 ```{r}
 comparePhylo(morph.tree, mol.tree, plot = FALSE, force.rooted = FALSE,
              use.edge.length = FALSE)
+```
+#We can also see that the morphological tree is rooted and the molecular tree is unrooted. We can either go back and adjust the molecular tree to root it, or we can adjust our code to force root both trees.
 
-comparePhylo(morph.tree.reduced, mol.tree.reduced, plot = FALSE, force.rooted = FALSE, use.edge.length = FALSE)
-
+```{r}
+comparePhylo(morph.tree, mol.tree, plot = FALSE, force.rooted = TRUE, use.edge.length = FALSE)
+```
+#This shows the number of clades that are different in each tree. As we can see, there are a lot more clades in the molecular tree than the morphological tree.
