@@ -5,7 +5,7 @@ date: "11/5/2021"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, error = TRUE, cache=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -321,7 +321,8 @@ This will tell you that the molecular tree is __NOT ultrametric__, which means t
 When both trees are non-ultrametric, we are limited to the number of analyses that we can perform.
 
 Next we'll try comparing phylogenetic tree topographies using the comparePhylo function from the APE package.
- 
+
+#Challenge: Which tree has the least amount of nodes? Which tree has the most amount of tips?
 ```{r}
 comparePhylo(morph.tree, mol.tree, plot = FALSE, force.rooted = FALSE,
              use.edge.length = FALSE)
