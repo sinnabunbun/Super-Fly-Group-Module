@@ -255,7 +255,7 @@ library(ggplot2)
 ```
 
 ```{r}
-p<- ggplot(mol.tree) + geom_tree() + theme_tree() + geom_tiplab()
+p<- ggtree(mol.tree) + geom_tree() + theme_tree() + geom_tiplab()
 p2 <- p %>% collapse(node=21) + 
   geom_point2(aes(subset=(node==21)), shape=21, size=5, fill='green')
 p2 <- collapse(p2, node=23) + 
@@ -270,6 +270,72 @@ expand(p2, node=23) %>% expand(node=21)
 ```{r}
 morph_tree_3 <- read.nexus.data(file = "matrix_from_app2_xl_file.nex")
 
-morphotree <- plot(tree, "phylogram", main="morph_tree_3")
-morphotree
+
+```
+#Converting object in class list to object class phylo
+```{r}
+class(morph_tree_3) #see what class the object is in
+
+
+install.packages("phylobase")
+library(phylobase)
+
+morph_tree_3 <- read.nexus.data(file = "matrix_from_app2_xl_file.nex")
+morph <- as.data.frame(morph_tree_3) #putting the morph data in a dataframe
+as.dendrogram(as_phydat)
+
+example <- read.nexus.splits("matrix_from_app2_xl_file.nex") #trying to read tree as class phylo
+
+
+x <- ~Family/Genus/Species
+as.phylo(x, data = morph_tree_3, collapse = FALSE)
+
+```
+#Trying phylogram package
+```{r}
+install.packages("phylogram")
+library(phylogram)
+read.dendrogram(file = "matrix_from_app2_xl_file.nex")
+
+#####This will convert a dataframe to a phylo object
+install.packages("TreeSummarizedExperiment")
+toTree(morph, column_order = NULL)
+
+
+
+R.Version()
+if (!requireNamespace("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+
+BiocManager::install("TreeSummarizedExperiment")
+library(TreeSummarizedExperiment)
+
+toTree(morph, column_order=NULL) #converts matrix to phylo object, but gives error of not allowed to have duplicated values in leaf column levona
+duplicated(morph) #doesn't show any duplicates, can't find column levona?
+
+
+morph2 <- morph[!duplicated(morph$levona),] 
+toTree(morph2, column_order=NULL)
+#removed the alleged duplicate, but now it says i need to reorder columns from high to low
+
+#Made matrix in excel file a .csv, will try with that
+morph.csv <- read.csv("Appendix 2 wilmott.csv")
+toTree(morph.csv, column_order = NULL)
+
+duplicated(morph.csv) #looking for duplicates in csv, there are 3
+dedup_morph.csv <- unique(morph.csv, incomparables = FALSE) #removing duplicates
+dedup_morph.csv
+
+duplicated(dedup_morph.csv) #making sure the duplicates are gone, they are
+
+toTree(dedup_morph.csv, column_order = NULL) #still says there is a duplicate in leaf column x.115
+```
+
+```
+#Comparing
+```{r}
+comparePhylo(morph.tree, mol.tree, plot = FALSE, force.rooted = FALSE,
+             use.edge.length = FALSE)
+
+
 ```
