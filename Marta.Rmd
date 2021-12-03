@@ -62,3 +62,26 @@ my_data <- MatrixToPhyDat(raw_data)#i think these are important
 ```{r}
 read.nexus.data("matrix_from_app2_xl_file.nex")
 ```
+
+```{r}
+library(help = geiger)
+library(geiger)
+```
+```{r}
+string <- "((A_alala_negra, A_corcyra_aretina, A_tracta, A_pithys, A_donysa_donysa), ((A_serpacelerio, A_seriphiaaquillia, A_seriphiatherasia), (A_melonaleucocoma, A_salmoneus_colada, A_cytherea_cytherea, A_cythereadaguana, A_epioneagilla, A_etheldaethelda, A_thessaliathessalia, A_iphicleolathessalita, A_iphiclusiphiclus, A_shuara, A_plesaurephliassa, A_basiloides, A_atticaattica, A_leucerioides, A_saundersiisaundersii, A_boreasboreas, A_rothschildi, A_sichaeus, A_cocalacocala, A_leucophthalmairminella, A_irminatumida, A_pollina, A_lycoriaslara, A_lycoriasspruceana, A_erotia_erotia, A_mesentina, A_phylaca_pseudaethalia, A_capucinus_capucinus, A_heraclea_heraclea, A_naxia_naxia, A_justina_valentina, A_olynthia, A_jordani, A_zinazina, A_zinairma, A_delinita_delinita, A_boeotia_boeotia, A_maleaaethalia)));"
+
+morph.tree<-read.tree(text=string)
+plot(morph.tree,no.margin=TRUE,edge.width=2)
+```
+```{r}
+#attempt
+#text='((A:1, B:1):2, ((C:1, D:1):2, (E:1, F:1):2):4);')
+mol.tree<-read.nexus(file="NJst.tre")
+mol.tree
+
+myTree <- ape::read.tree(text= '((A_alala_negra:1, A_corcyra_aretina:1, A_tracta:1, A_pithys:1, A_donysa_donysa:1):3, ((A_serpacelerio:1, A_seriphiaaquillia:1, A_seriphiatherasia:1):2, (A_melonaleucocoma:1, A_salmoneus_colada:1, A_cytherea_cytherea:1, A_cythereadaguana:1, A_epioneagilla:1, A_etheldaethelda:1, A_thessaliathessalia:1, A_iphicleolathessalita:1, A_iphiclusiphiclus:1, A_shuara:1, A_plesaurephliassa:1, A_basiloides:1, A_atticaattica:1, A_leucerioides:1, A_saundersiisaundersii:1, A_boreasboreas:1, A_rothschildi:1, A_sichaeus:1, A_cocalacocala:1, A_leucophthalmairminella:1, A_irminatumida:1, A_pollina:1, A_lycoriaslara:1, A_lycoriasspruceana:1, A_erotia_erotia:1, A_mesentina:1, A_phylaca_pseudaethalia:1, A_capucinus_capucinus:1, A_heraclea_heraclea:1, A_naxia_naxia:1, A_justina_valentina:1, A_olynthia:1, A_jordani:1, A_zinazina:1, A_zinairma:1, A_delinita_delinita:1, A_boeotia_boeotia:1, A_maleaaethalia:1):2):3):4;')
+plot(myTree)
+
+comparePhylo(myTree, mol.tree, plot = FALSE, force.rooted = FALSE,
+             use.edge.length = FALSE)
+```
