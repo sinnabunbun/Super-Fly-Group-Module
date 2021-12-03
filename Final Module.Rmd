@@ -240,7 +240,7 @@ add.arrow(mol.tree,tip="A_saundersii_saundersii",arrl=1)
 In order to compare molecular and morphological trees of the Adelpha lineage, we needed to build a tree in R from a phylogeny constructed based on morphological data, like the one reported in Keith Wilmott's paper. However, because this tree was created in 2003 and is therefore not in a format that is easily compatible with current R software, we ended up transcribing the tree into R in Newick format based on the phylogenetic relationships presented in Wilmott's Figure 8. 
 
 ```{r}
-string <- "((A. alala negra, A. corcyra aretina, A. tracta, A. pithys, A. donysa donysa), ((A. serpacelerio, A. seriphiaaquillia, A. seriphiatherasia), (A. melonaleucocoma, A. salmoneus colada, A. cythereacytherea, A. cythereadaguana, A. epioneagilla, A. etheldaethelda, A. thessaliathessalia, A. iphicleolathessalita, A. iphiclusiphiclus, A. shuara, A. plesaurephliassa, A. basiloides, A. atticaattica, A. leucerioides, A. saundersiisaundersii, A. boreasboreas, A. rothschildi, A. sichaeus, A. cocalacocala, A. leucophthalmairminella, A. irminatumida, A. pollina, A. lycoriaslara, A. lycoriasspruceana, A. erotia erotia, A. mesentina, A. phylaca pseudaethalia, A. capucinus capucinus, A. heraclea heraclea, A. naxia naxia, A. justina valentina, A. olynthia, A. jordani, A. zinazina, A. zinairma, A. delinita delinita, A. boeotia boeotia, A. maleaaethalia)));"
+string <- "((A_alala_negra, A_corcyra_aretina, A_tracta, A_pithys, A_donysa_donysa), ((A_serpacelerio, A_seriphiaaquillia, A_seriphiatherasia), (A_melonaleucocoma, A_salmoneus_colada, A_cytherea_cytherea, A_cythereadaguana, A_epioneagilla, A_etheldaethelda, A_thessaliathessalia, A_iphicleolathessalita, A_iphiclusiphiclus, A_shuara, A_plesaurephliassa, A_basiloides, A_atticaattica, A_leucerioides, A_saundersiisaundersii, A_boreasboreas, A_rothschildi, A_sichaeus, A_cocalacocala, A_leucophthalmairminella, A_irminatumida, A_pollina, A_lycoriaslara, A_lycoriasspruceana, A_erotia_erotia, A_mesentina, A_phylaca_pseudaethalia, A_capucinus_capucinus, A_heraclea_heraclea, A_naxia_naxia, A_justina_valentina, A_olynthia, A_jordani, A_zinazina, A_zinairma, A_delinita_delinita, A_boeotia_boeotia, A_maleaaethalia)));"
 
 morph.tree<-read.tree(text=string)
 plot(morph.tree,no.margin=TRUE,edge.width=2)
@@ -290,6 +290,57 @@ multiplot(ggtree(mol.tree), ggtree(morph.tree), ncol=2, labels=c('Molecular Tree
 
 ## Comparison
 
+First we will use the function all.equal from the APE package. This is a good place to start when comparing trees because it will tell you the basics: are these trees the same? It's a good exploratory function, but after we learn that they are not the same, we have to dig deeper.
+```{r}            
+all.equal(mol.tree, morph.tree, use.edge.length = TRUE,
+                   use.tip.label = TRUE)
+```
+
+#Let's see if the trees are ultrametric.
+```{r}
+is.ultrametric(mol.tree)
+is.ultrametric(morph.tree)
+```
+
+This will tell you that the molecular tree is __NOT ultrametric__, which means the tips of the tree are not equally distant from the root of their respective tree. We get an error about the morphological tree's lack of branch lengths, so let's try a different function that will give us more information.
+
+When both trees are non-ultrametric, we are limited to the number of analyses that we can perform.
+
+Next we'll try comparing phylogenetic tree topographies using the comparePhylo function from the APE package.
+ 
+```{r}
+comparePhylo(morph.tree, mol.tree, plot = FALSE, force.rooted = FALSE,
+             use.edge.length = FALSE)
+```
+#The morphological tree is also non-ultrametric. Essentially, both trees have structure and are not one big polytomy, and branch lengths differ, although one phylogeny is more structured than the other. Can you tell which one it is? 
+
+It also tells us that they have different numbers of tips (46 and 66) which makes sense because they aren't looking at the same number of individuals. Naturally because of this, these trees will inherently be different from each other structurally. The morph tree has fewer nodes not only because it's hypothesizing the relationships among fewer individuals, but also because there is more uncertainty. This tree is comb like, and we can interpret this as an unresolved phylogeny. 
+
+#When both trees are non-ultrametric, the number of analyses that we can perform is limited. Let's explore what more we can learn about these trees.
+
+#We can also see that the morphological tree is rooted and the molecular tree is unrooted. We can either go back and adjust the molecular tree to root it, or we can adjust our code to force root both trees and analyze the molecular tree as if it were rooted.
+
+```{r}
+comparePhylo(morph.tree, mol.tree, plot = FALSE, force.rooted = TRUE, use.edge.length = FALSE)
+```
+#This shows the number of clades that are different in each tree. As we can see, there are a lot more clades in the molecular tree than the morphological tree.
+
+#Check to see if they are binary. According to the APE package, "The test differs whether the tree is rooted or not. An urooted tree is considered binary if all its nodes are of degree three (i.e., three edges connect to each node). A rooted tree is considered binary if all nodes (including the root node) have exactly two descendant nodes, so that they are of degree three expect the root which is of degree 2." Our molecular tree is unrooted and our morphological tree is rooted, so keep that in mind.
+```{r}
+is.binary(mol.tree)
+is.binary(morph.tree)
+```
+
+
+
+
+
+
+
+
+
+###Unsure about the following chunks:
+
 ```{r}
 all.equal(mol.tree, morph.tree, use.edge.length = TRUE,
                    use.tip.label = TRUE)
@@ -316,4 +367,17 @@ association <- cbind(mol.tree$tip.label, morph.tree$tip.label)
 cophyloplot(mol.tree, morph.tree, assoc = association, length.line = 4, space = 28, gap = 3)
 ```
 
+First we will use the function all.equal. This is a good place to start when comparing trees because it will tell you the basics: are these trees the same? It's a good exploratory function, but after we learn that they are not the same, we have to dig deeper.
+<div class = "blue">
+```{r}            
+all.equal(mol.tree, morph.tree, use.edge.length = TRUE,
+                   use.tip.label = TRUE)
+```
 
+Next we'll try comparing phylogenetic tree topographies using the comparePhylo function. This will tell you that both trees are __NOT ultrametric__, which means the tips of each tree are not equally distant from the root of their respective tree. Essentially, both trees have structure and are not one big polytomy. It also tells us that they have different numbers of tips (46 and 66) which makes sense because they aren't looking at the same number of individuals. Naturally because of this, these trees will inherently be different from each other structurally. The morph tree has fewer nodes not only because it's hypothesizing the relationships among fewer individuals, but also because there is more uncertainty. This tree is comb like, and we can interpret this as an unresolved phylogeny.
+<div class = "blue">
+```{r}
+comparePhylo(morph.tree, mol.tree, plot = FALSE, force.rooted = FALSE,
+             use.edge.length = FALSE)
+
+comparePhylo(morph.tree.reduced, mol.tree.reduced, plot = FALSE, force.rooted = FALSE, use.edge.length = FALSE)
