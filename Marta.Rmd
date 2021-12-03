@@ -68,3 +68,15 @@ my_data <- MatrixToPhyDat(raw_data)
 ```{r}
 PhyToString(my_data)
 ```
+
+```{r}
+library(geiger)
+plotTree(amphibia)
+```
+```
+```{r}
+list.[c(mol.tree$tip.label, morph.tree$tip.label)]
+summary(list.)
+list.[order(names(list.))]
+sorted<-sort(list.)
+```
