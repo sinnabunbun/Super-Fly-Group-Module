@@ -188,7 +188,7 @@ plot(whale.tree, type = "phylogram",  edge.color = "red", tip.color = "green", f
 
 Now that we are a little more comfortable working with phylogenetic trees in R, we can load our first tree! 
 
-First, copy the tree data at ![This Link](https://raw.githubusercontent.com/sinnabunbun/Super-Fly-Group-Module/main/NJst.tre) 
+First, copy the tree data at [{This Link}](https://raw.githubusercontent.com/sinnabunbun/Super-Fly-Group-Module/main/NJst.tre) 
 Then go to your own working repo, select the "Create New File" option and paste the tree data into that file.  
 
 Once you have the tree file saved in your repo, you can load the tree into your R markdown file using the "read.nexus" command 
@@ -201,31 +201,29 @@ mol.tree
 Once the tree is loaded, we can try plotting it! 
 
 ```{r}
-plot(mol.tree, type = "phylogram",  edge.color = "purple", tip.color = "black", font = 1)
+par(mfrow = c(2, 3))
+phy <- plot(mol.tree, type = "phylogram",  edge.color = "purple", font = 1, show.tip.label = FALSE)
+phy
+
+unroot <- plot(unroot(mol.tree),type="unrooted",cex=0.6,
+    use.edge.length=FALSE,lab4ut="axial",
+    no.margin=TRUE, show.tip.label = FALSE, edge.color = "red")
+unroot
+
+radial <- plot(mol.tree, type = "radial",  edge.color = "green", tip.color = "black", font = 1, show.tip.label = FALSE)
+radial
+
+fan <- plot(mol.tree, type = "fan",  edge.color = "blue", tip.color = "black", font = 1, show.tip.label = FALSE)
+fan
+
+clade <- plot(mol.tree, type = "cladogram",  edge.color = "orange", tip.color = "black", font = 1, show.tip.label = FALSE)
+clade
 ```
 
 the Ntip() function will tell you how many different species (or tips) are represented in your tree 
 
 ```{r}
 Ntip(mol.tree) ##66 species in this tree
-```
-
-Just like with the whale tree above, we can use "unroot" to create an unrooted tree 
-
-```{r}
-plot(unroot(mol.tree),type="unrooted",cex=0.6,
-    use.edge.length=FALSE,lab4ut="axial",
-    no.margin=TRUE)
-##unrooted tree 
-```
-
-we can also make a fan or radial tree 
-
-```{r}
-plot(mol.tree, type = "radial",  edge.color = "purple", tip.color = "black", font = 1)
-```
-```{r}
-plot(mol.tree, type = "fan",  edge.color = "purple", tip.color = "black", font = 1)
 ```
 
 To generate a list of species names, use mol.tree$tip.label
@@ -241,19 +239,20 @@ A great way to draw attention to a specific species in a tree plot is to add an 
 ###SOLUTION 4
 ```{r}
 ##add an arrow on a specific branch tip 
-plot(mol.tree, type = "phylogram",  edge.color = "purple", tip.color = "black", font = 1)
-add.arrow(mol.tree,tip="A_saundersii_saundersii",arrl=1)
+plot(mol.tree)
+add.arrow(mol.tree,tip="A_saundersii_saundersii",arrl=4)
+```
+
+With nexus trees, you can also create node labels. This is especially useful if you want to highlight a specific node. 
+
+```{r}
+plot(mol.tree,no.margin=TRUE,edge.width=2)
+nodelabels(text=1:mol.tree$Nnode,node=1:mol.tree$Nnode+Ntip(mol.tree))
 ```
 
 ```{r}
-mol.tree<-read.nexus(file="NJst.tre")
-plot(mol.tree,no.margin=TRUE,edge.width=2)
-nodelabels(text=1:mol.tree$Nnode,node=1:mol.tree$Nnode+Ntip(mol.tree))
-
-
 plot(mol.tree, "fan", main="Molecular Tree", edge.width = 3, edge.color = "pink", show.tip.label = FALSE)
-arc.cladelabels(tree=mol.tree, "Serpa Clade", node = 55, ln.offset=1.02,
-   lab.offset=1.06, cex=1, orientation="curved")
+arc.cladelabels(tree=mol.tree, "A. rothschildi", node = 4, cex=1, orientation="curved")
 ```
 
 
@@ -268,26 +267,30 @@ morph.tree<-read.tree(text=string)
 plot(morph.tree,no.margin=TRUE,edge.width=2)
 ```
 
-Just as we did with the molecular tree above, we can also plot this tree is a variety of ways 
 ```{r}
-morph.tree2 <- plot(morph.tree, "fan", main="Morphological Tree")
-morph.tree2
-```
+par(mfrow = c(2, 3))
+phy2 <- plot(morph.tree, type = "phylogram",  edge.color = "purple", font = 1, show.tip.label = FALSE)
+phy2
 
-or an unrooted tree 
-```{r}
-morph.tree3 <- plot(morph.tree, "unrooted", main="Morphological Tree")
-morph.tree3
-```
+unroot2 <- plot(unroot(morph.tree),type="unrooted",cex=0.6,
+    use.edge.length=FALSE,lab4ut="axial",
+    no.margin=TRUE, show.tip.label = FALSE, edge.color = "red")
+unroot2
 
-```{r}
-plot(morph.tree, "fan", main="Morphological Tree", edge.width = 3, edge.color = "pink", show.tip.label = FALSE)
-arc.cladelabels(tree=morph.tree, "Serpa Clade", node = 3, ln.offset=1.02,
-   lab.offset=1.06, cex=1, orientation="curved")
+radial2 <- plot(morph.tree, type = "radial",  edge.color = "green", tip.color = "black", font = 1, show.tip.label = FALSE)
+radial2
+
+fan2 <- plot(morph.tree, type = "fan",  edge.color = "blue", tip.color = "black", font = 1, show.tip.label = FALSE)
+fan2
+
+clade2 <- plot(morph.tree, type = "cladogram",  edge.color = "orange", tip.color = "black", font = 1, show.tip.label = FALSE)
+clade2
 ```
 
 
 #ggtree
+
+You can also plot these trees using the ggplot2 and ggtree packages 
 
 ```{r}
 #Morphological tree plot
@@ -325,7 +328,7 @@ all.equal(mol.tree, morph.tree, use.edge.length = TRUE,
 #Let's see if the trees are ultrametric.
 ```{r}
 is.ultrametric(mol.tree)
-is.ultrametric(morph.tree)
+##is.ultrametric(morph.tree) ? 
 ```
 
 This will tell you that the molecular tree is __NOT ultrametric__, which means the tips of the tree are not equally distant from the root of their respective tree. We get an error about the morphological tree's lack of branch lengths, so let's try a different function that will give us more information.
@@ -369,7 +372,7 @@ library(phylogram)
 tree1 <- mol.tree
 tree1 <- midpoint.root(tree1)
 tree2 <- morph.tree
-tree2 <- midpoint.root(tree2)
+##tree2 <- midpoint.root(tree2)
 tree1 <- compute.brlen(tree1)
 tree2 <- compute.brlen(tree2)
 tree1<- as.dendrogram(tree1)

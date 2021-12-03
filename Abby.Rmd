@@ -6,93 +6,132 @@ output: html_document
 ---
 
 ```{r}
-R.version
-```
-
-```{r}
 library(ape)
 library(fastmatch)
 library(quadprog)
 library(phangorn)
 library(phytools)
 library(geiger)
+library(ggplot2)
+library(ggtree)
 ```
 
 ```{r}
 mol.tree<-read.nexus(file="NJst.tre")
 mol.tree
-nodelabels(text=1:mol.tree$Nnode,node=1:mol.tree$Nnode+Ntip(mol.tree))
 ```
+
+Once the tree is loaded, we can try plotting it! 
 
 ```{r}
-mol.tree<-read.nexus(file="NJst.tre")
-plot(mol.tree,no.margin=TRUE,edge.width=2)
-nodelabels(text=1:mol.tree$Nnode,node=1:mol.tree$Nnode+Ntip(mol.tree))
+par(mfrow = c(2, 3))
+phy <- plot(mol.tree, type = "phylogram",  edge.color = "purple", font = 1, show.tip.label = FALSE)
+phy
 
+unroot <- plot(unroot(mol.tree),type="unrooted",cex=0.6,
+    use.edge.length=FALSE,lab4ut="axial",
+    no.margin=TRUE, show.tip.label = FALSE, edge.color = "red")
+unroot
 
-plot(mol.tree, "fan", main="Molecular Tree", edge.width = 3, edge.color = "pink", show.tip.label = FALSE)
-arc.cladelabels(tree=mol.tree, "Serpa Clade", node = 55, ln.offset=1.02,
-   lab.offset=1.06, cex=1, orientation="curved")
+radial <- plot(mol.tree, type = "radial",  edge.color = "green", tip.color = "black", font = 1, show.tip.label = FALSE)
+radial
+
+fan <- plot(mol.tree, type = "fan",  edge.color = "blue", tip.color = "black", font = 1, show.tip.label = FALSE)
+fan
+
+clade <- plot(mol.tree, type = "cladogram",  edge.color = "orange", tip.color = "black", font = 1, show.tip.label = FALSE)
+clade
 ```
+
+the Ntip() function will tell you how many different species (or tips) are represented in your tree 
+
+```{r}
+Ntip(mol.tree) ##66 species in this tree
+```
+
+To generate a list of species names, use mol.tree$tip.label
 
 ```{r}
 ##all the species names 
 mol.tree$tip.label
 ```
 
-```{r}
-library('stringr') 
-species <- mol.tree$tip.label
-string <- paste(species, collapse= "")
-string
-str_split(species,",", simplify= TRUE)
+##CHALLENGE 4 
+A great way to draw attention to a specific species in a tree plot is to add an arrow pointing to a specific species. Now that you can see all the species names, pick a species and use add.arrow() to draw an arrow to it! 
 
+###SOLUTION 4
+```{r}
+##add an arrow on a specific branch tip 
+plot(mol.tree)
+add.arrow(mol.tree,tip="A_saundersii_saundersii",arrl=4)
+```
+With nexus trees, you can also create node labels. This is especially useful if you want to highlight a specific node. 
+
+```{r}
+plot(mol.tree,no.margin=TRUE,edge.width=2)
+nodelabels(text=1:mol.tree$Nnode,node=1:mol.tree$Nnode+Ntip(mol.tree))
 ```
 
 ```{r}
-text.string<-
-    "((((humpback wahle, fin whale), (Antarctic minke whale, common minke whale)), bowhead whale), sperm whale);"
+plot(mol.tree, "fan", main="Molecular Tree", edge.width = 3, edge.color = "pink", show.tip.label = FALSE)
+arc.cladelabels(tree=mol.tree, "A. rothschildi", node = 4, cex=1, orientation="curved")
 ```
 
+
+#Morphological Tree
+
+In order to compare molecular and morphological trees of the Adelpha lineage, we needed to build a tree in R from a phylogeny constructed based on morphological data, like the one reported in Keith Wilmott's paper. However, because this tree was created in 2003 and is therefore not in a format that is easily compatible with current R software, we ended up transcribing the tree into R in Newick format based on the phylogenetic relationships presented in Wilmott's Figure 8. 
+
 ```{r}
-string <- "((A. alala negra, A. corcyra aretina, A. tracta, A. pithys, A. donysa donysa), ((A. serpacelerio, A. seriphiaaquillia, A. seriphiatherasia), (A. melonaleucocoma, A. salmoneus colada, A. cythereacytherea, A. cythereadaguana, A. epioneagilla, A. etheldaethelda, A. thessaliathessalia, A. iphicleolathessalita, A. iphiclusiphiclus, A. shuara, A. plesaurephliassa, A. basiloides, A. atticaattica, A. leucerioides, A. saundersiisaundersii, A. boreasboreas, A. rothschildi, A. sichaeus, A. cocalacocala, A. leucophthalmairminella, A. irminatumida, A. pollina, A. lycoriaslara, A. lycoriasspruceana, A. erotia erotia, A. mesentina, A. phylaca pseudaethalia, A. capucinus capucinus, A. heraclea heraclea, A. naxia naxia, A. justina valentina, A. olynthia, A. jordani, A. zinazina, A. zinairma, A. delinita delinita, A. boeotia boeotia, A. maleaaethalia)));"
+string <- "((A_alala_negra, A_corcyra_aretina, A_tracta, A_pithys, A_donysa_donysa), ((A_serpacelerio, A_seriphiaaquillia, A_seriphiatherasia), (A_melonaleucocoma, A_salmoneus_colada, A_cytherea_cytherea, A_cythereadaguana, A_epioneagilla, A_etheldaethelda, A_thessaliathessalia, A_iphicleolathessalita, A_iphiclusiphiclus, A_shuara, A_plesaurephliassa, A_basiloides, A_atticaattica, A_leucerioides, A_saundersiisaundersii, A_boreasboreas, A_rothschildi, A_sichaeus, A_cocalacocala, A_leucophthalmairminella, A_irminatumida, A_pollina, A_lycoriaslara, A_lycoriasspruceana, A_erotia_erotia, A_mesentina, A_phylaca_pseudaethalia, A_capucinus_capucinus, A_heraclea_heraclea, A_naxia_naxia, A_justina_valentina, A_olynthia, A_jordani, A_zinazina, A_zinairma, A_delinita_delinita, A_boeotia_boeotia, A_maleaaethalia)));"
 
 morph.tree<-read.tree(text=string)
 plot(morph.tree,no.margin=TRUE,edge.width=2)
-nodelabels(text=1:morph.tree$Nnode,node=1:morph.tree$Nnode+Ntip(morph.tree))
-
-plot(morph.tree, "fan", main="Morphological Tree", edge.width = 3, edge.color = "pink", show.tip.label = FALSE)
-arc.cladelabels(tree=morph.tree, "Serpa Clade", node = 3, ln.offset=1.02,
-   lab.offset=1.06, cex=1, orientation="curved")
 ```
 ```{r}
+par(mfrow = c(2, 3))
+phy2 <- plot(morph.tree, type = "phylogram",  edge.color = "purple", font = 1, show.tip.label = FALSE)
+phy2
+
+unroot2 <- plot(unroot(morph.tree),type="unrooted",cex=0.6,
+    use.edge.length=FALSE,lab4ut="axial",
+    no.margin=TRUE, show.tip.label = FALSE, edge.color = "red")
+unroot2
+
+radial2 <- plot(morph.tree, type = "radial",  edge.color = "green", tip.color = "black", font = 1, show.tip.label = FALSE)
+radial2
+
+fan2 <- plot(morph.tree, type = "fan",  edge.color = "blue", tip.color = "black", font = 1, show.tip.label = FALSE)
+fan2
+
+clade2 <- plot(morph.tree, type = "cladogram",  edge.color = "orange", tip.color = "black", font = 1, show.tip.label = FALSE)
+clade2
+```
+
+
+#ggtree
+
+You can also plot these trees using the ggplot2 and ggtree packages 
+
+```{r}
 #Morphological tree plot
-p <- ggtree(morph.tree, color="purple", size=0.5, linetype="dotted")
+library(ggtree)
+p <- ggtree(morph.tree, color="purple", size=0.5)
 p <- p + geom_tiplab(size=2)
-p <- p + geom_cladelabel(node = 3, label="Serpa Clade", align=TRUE, offset=1, angle=90) 
 p
 ```
 
 ```{r}
 #Molecular tree plot 
-g <- ggtree(mol.tree, color="green", size=0.5, linetype="dotted")
-g <- g + geom_tiplab() 
-g <- g + geom_cladelabel(node=47, label="Serpa", angle = 90, 
-                  color="red2", align=TRUE) 
-g <- g + geom_hilight(node=6, fill="gold")
+g <- ggtree(mol.tree, color="green", size=0.5)
+g <- g + geom_tiplab(size=2)
 g
 ```
 
-
-
 ```{r}
 library("gridExtra")
-grid.arrange(ggtree(tree) + ggtitle("(Phylogram) rectangular layout"),
-             ggtree(tree, branch.length='none') + ggtitle("(Cladogram) rectangular layout"),
-         ggtree(tree, layout="slanted") + ggtitle("(Phylogram) slanted layout"),
-             ggtree(tree, layout="slanted", branch.length='none') + ggtitle("(Cladogram) slanted layout"),
-         ggtree(tree, layout="circular") + ggtitle("(Phylogram) circular layout"),
-             ggtree(tree, layout="circular", branch.length="none") + ggtitle("(Cladogram) circular layout"),
-         ggtree(tree, layout="unrooted") + ggtitle("unrooted layout"),
-         ncol=2)
+grid.arrange(
+    ggtree(mol.tree, color="red") + theme_tree("steelblue"),
+    ggtree(morph.tree, color="white") + theme_tree("black"),
+    ncol=2)
 ```
