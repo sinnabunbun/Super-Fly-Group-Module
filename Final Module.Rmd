@@ -188,70 +188,66 @@ add.arrow(mol.tree,tip="A_saundersii_saundersii",arrl=1)
 
 ### Morphological Tree
 
-We will follow a similar process as with the molecular tree  to get the morphological tree loaded into our R markdown file. Go to the Super Fly Group Module repo, copy the data from "matrix_from_app2_xl_file.nex" and save it as a file in your working repo. 
+In order to compare molecular and morphological trees of the Adelpha lineage, we needed to build a tree in R from a phylogeny constructed based on morphological data, like the one reported in Keith Wilmott's paper. However, because this tree was created in 2003 and is therefore not in a format that is easily compatible with current R software, we ended up transcribing the tree into R in Newick format based on the phylogenetic relationships presented in Wilmott's Figure 8. 
 
-Because the morphological tree is from 2003, we need to do a little more work to get it into a format that can be read by R. Once you have the data loaded, we need to convert the matrix file into a PhyDat file by running the following code 
 ```{r}
-library(TreeTools)
-as_phydat <- ReadAsPhyDat("matrix_from_app2_xl_file.nex")
-as_phydat
-summary(as_phydat)
-raw_data <- ReadCharacters("matrix_from_app2_xl_file.nex")
-raw_data
-my_data <- MatrixToPhyDat(raw_data)
-my_data
+string <- "((A. alala negra, A. corcyra aretina, A. tracta, A. pithys, A. donysa donysa), ((A. serpacelerio, A. seriphiaaquillia, A. seriphiatherasia), (A. melonaleucocoma, A. salmoneus colada, A. cythereacytherea, A. cythereadaguana, A. epioneagilla, A. etheldaethelda, A. thessaliathessalia, A. iphicleolathessalita, A. iphiclusiphiclus, A. shuara, A. plesaurephliassa, A. basiloides, A. atticaattica, A. leucerioides, A. saundersiisaundersii, A. boreasboreas, A. rothschildi, A. sichaeus, A. cocalacocala, A. leucophthalmairminella, A. irminatumida, A. pollina, A. lycoriaslara, A. lycoriasspruceana, A. erotia erotia, A. mesentina, A. phylaca pseudaethalia, A. capucinus capucinus, A. heraclea heraclea, A. naxia naxia, A. justina valentina, A. olynthia, A. jordani, A. zinazina, A. zinairma, A. delinita delinita, A. boeotia boeotia, A. maleaaethalia)));"
 
-#Isabel's:
-morph_tree_3 <- read.nexus.data(file = "matrix_from_app2_xl_file.nex")
-
-morphotree <- plot(tree, "phylogram", main="morph_tree_3")
-morphotree
+morph.tree<-read.tree(text=string)
+plot(morph.tree,no.margin=TRUE,edge.width=2)
 ```
 
-Once we have the data written in a format that can be read by R, we can use the function "dist.ml" from the package ape to compute distances. Once we've done that, we can write a phylogenetic tree using Neighbor Joining (NJ) methods and plot it as a phylogram 
+Just as we did with the molecular tree above, we can also plot this tree is a variety of ways 
 ```{r}
-morph  <- dist.ml(my_data)
-treeNJ  <- NJ(morph)
-tree <- pratchet(my_data) 
-morph.tree <- plot(tree, "phylogram", main="Morphological Tree")
-morph.tree
-```
-
-we can also make a fan tree 
-```{r}
-morph.tree2 <- plot(tree, "fan", main="Morphological Tree")
+morph.tree2 <- plot(morph.tree, "fan", main="Morphological Tree")
 morph.tree2
 ```
 
 or an unrooted tree 
 ```{r}
-morph.tree3 <- plot(tree, "unrooted", main="Morphological Tree")
+morph.tree3 <- plot(morph.tree, "unrooted", main="Morphological Tree")
 morph.tree3
 ```
 
 ## GGTree
 
 https://guangchuangyu.github.io/ggtree-book/chapter-ggtree.html#fig:viewClade
-
+code for installing ggtree package from BiocManager 
 ```{r, include=FALSE}
  if (!requireNamespace("BiocManager", quietly = TRUE))
 +     install.packages("BiocManager")
  BiocManager::install("ggtree")
+```
+
+Load ggplot2 and ggtree into your markdown file 
+```{r}
+library(ggplot2)
 library(ggtree)
 ```
 
 ```{r}
-library(ggplot2)
+g <- ggtree(mol.tree, color="steelblue", size=0.5, linetype="dotted")
+g <- g + geom_tiplab(size=2)
+g
 ```
 
 ```{r}
-p<- ggplot(mol.tree) + geom_tree() + theme_tree() + geom_tiplab()
-p2 <- p %>% collapse(node=21) + 
-  geom_point2(aes(subset=(node==21)), shape=21, size=5, fill='green')
-p2 <- collapse(p2, node=23) + 
-  geom_point2(aes(subset=(node==23)), shape=23, size=5, fill='red')
-print(p2)
-expand(p2, node=23) %>% expand(node=21)
+ggtree(mol.tree, layout="circular") + ggtitle("(Phylogram) circular layout")
 ```
 
+```{r}
+multiplot(ggtree(mol.tree), ggtree(morph.tree), ncol=2, labels=c('Molecular Tree', 'Morphological Tree'))
+```
+
+
 ## Comparison
+
+```{r}
+comparePhylo(mol.tree, morph.tree,  plot = FALSE, force.rooted = FALSE,
+             use.edge.length = FALSE)
+```
+```{r}
+all.equal(mol.tree, morph.tree, use.edge.length = TRUE,
+                   use.tip.label = TRUE)
+```
+
