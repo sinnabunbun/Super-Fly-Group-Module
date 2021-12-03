@@ -374,6 +374,35 @@ is.binary(mol.tree)
 is.binary(morph.tree)
 ```
 
+#Now, let's try to plot these trees and view the characters that they have in common. Let's use the package dendextend. You will get some errors about the mol.tree being non-ultrametric and the morph.tree having a branch length of zero, but keep going through to plot(prunedplot).
+```{r}
+library(ape)
+library(phytools)
+library(dendextend)
+library(viridis)
+library(dplyr)
+library(phylogram)
+
+tree1 <- mol.tree
+tree1 <- midpoint.root(tree1)
+tree2 <- morph.tree
+tree2 <- midpoint.root(tree2)
+tree1 <- compute.brlen(tree1)
+tree2 <- compute.brlen(tree2)
+tree1<- as.dendrogram(tree1)
+tree1
+tree2<- as.dendrogram(tree2)
+
+dndlist <- dendextend::dendlist(tree1, tree2)
+prunedplot <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 1.8, lab.cex = 0.3, lwd = 
+0.5, edge.lwd = 0.5, type = "r")
+
+plot(prunedplot)
+```
+#Now we can clearly see the associations between these trees and the individuals and how they were rearranged. You can go branch by branch and follow the shaded lines to view where they are on the opposite tree.
+
+
+
 #Conclusion?
 
 ###Unsure about the following chunks:
