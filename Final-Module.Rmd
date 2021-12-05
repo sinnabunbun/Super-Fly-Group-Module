@@ -1,6 +1,6 @@
 ---
 title: "Phylogenetic Comparison between Molecular and Morphological Trees"
-author: "Abby Robinson, Isabel Novick, Marta Hammers"
+author: "Abby Robinson, Isabel Novick, Marta Hammers, Nirmiti Naik"
 date: "11/5/2021"
 output: 
   html_document:
@@ -17,6 +17,8 @@ knitr::opts_chunk$set(echo = TRUE)
 div.blue pre { background-color:navy; }
 div.blue pre.r { background-color:navy; }
 </style>
+
+# Tree Comparisons 
 
 <p class="text-primary">In our module we want to explore how we can build and plot phylogenetic trees based on molecular and morphological criteria and how to compare these trees statistically.</p>
 
@@ -35,14 +37,14 @@ Modern biologists can now build phylogenetic trees based on the DNA of the organ
 In order to assess any changes between these hypothesized evolutionary relationships, we can compare the topologies of phylogenetic trees. The topology refers to the branching pattern displayed, which represents the measure of relatedness among taxa. To understand the importance of topology, we must familiarize ourselves with the anatomy of a phylogenetic tree. 
 
 <h4><p class="text-primary">Anatomy of a tree:</p></h4>  
-![__Why would we compare tree topologies?__](https://media.springernature.com/full/springer-static/image/art%3A10.1007%2Fs12052-008-0035-x/MediaObjects/12052_2008_35_Fig2_HTML.gif?as=webp)
+![](https://media.springernature.com/full/springer-static/image/art%3A10.1007%2Fs12052-008-0035-x/MediaObjects/12052_2008_35_Fig2_HTML.gif?as=webp)
 
 ## Methods
 
-There are several different ways to estimate phylogenies, each with their own strengths, weaknesses, and appropriate situations in which to apply them. While we won’t go over them in detail, familiarize yourselves by looking at <a href="https://fuzzyatelin.github.io/bioanth-stats/module-24/module-24.html)">Module 24</a>  
+There are several different ways to estimate phylogenies, each with their own strengths, weaknesses, and appropriate situations in which to apply them. While we won’t go over them in detail, familiarize yourselves by looking at <a href="https://fuzzyatelin.github.io/bioanth-stats/module-24/module-24.html">Module 24</a>  
 There are MANY different phylogenetics software that we can use to employ these methods of estimation, but some of the most common are PAUP, BEAST, MrBayes, and PHYLIP. These can take genetic data (alignments) in the form of fastq files, fasta files, or NEXUS files.  
 
-<h4><p class="text-primary">Types of Tree Formats: Newick, Nexus</p></h4>
+<h4><p class="text-primary">Types of Tree Formats: Newick, Nexus</p></h4>  
 __Newick__: A collection of data formatted using specific syntax that includes parentheses, commas, and semicolons to delineate weight, time, and evolutionary distance. “Newick files are simply text files that consist of one or more tree descriptions in the Newick notation. In contrast to Nexus files they contain no further syntax elements or other information than the trees.”
 
 ## Comparing Trees
@@ -54,7 +56,8 @@ In this module, we will compare tree topologies for two different analyses of th
 
 ## Packages
 
->For starters, you will need to install [{ape}](https://www.rdocumentation.org/packages/ape/versions/5.5), [{phytools}](https://www.rdocumentation.org/packages/phytools/versions/0.7-90)
+>For starters, you will need to install [{ape}](https://www.rdocumentation.org/packages/ape/versions/5.5)
+[{phytools}](https://www.rdocumentation.org/packages/phytools/versions/0.7-90)
 [{fastmatch}](https://cran.r-project.org/web/packages/fastmatch/index.html)
 [{quadprog}](https://cran.r-project.org/web/packages/quadprog/index.html)
 [{phangorn}](https://www.rdocumentation.org/packages/phangorn/versions/2.7.1)
@@ -105,7 +108,7 @@ packageVersion("ape")
 
 To start off, we want to understand how a tree is created. For this example we will make our own tree using Newick format.
 
-Here is a great explanation of Newick format: __"Put simply, monophyletic clades are surrounded by parentheses and sister clades are separated by commas. For example, a simple tree could be written as (((A,B),C),(D,E))."__ Let's try making that!
+Here is a great explanation of Newick format: "Put simply, monophyletic clades are surrounded by parentheses and sister clades are separated by commas. For example, a simple tree could be written as (((A,B),C),(D,E))." Let's try making that!
 
 ### CHALLENGE 1
 
@@ -208,22 +211,17 @@ Once the tree is loaded, we can try plotting it! Here's a couple ways you can tr
 <div class = "blue">
 ```{r}
 par(mfrow = c(3, 3))
-phy <- plot(mol.tree, type = "phylogram",  edge.color = "purple", font = 1, show.tip.label = FALSE)
-phy
+plot(mol.tree, type = "phylogram",  edge.color = "purple", font = 1, show.tip.label = FALSE)
 
-unroot <- plot(unroot(mol.tree),type="unrooted",cex=0.6,
+plot(unroot(mol.tree),type="unrooted",cex=0.6,
     use.edge.length=FALSE,lab4ut="axial",
     no.margin=TRUE, show.tip.label = FALSE, edge.color = "red")
-unroot
 
-radial <- plot(mol.tree, type = "radial",  edge.color = "darkgreen", tip.color = "black", font = 1, show.tip.label = FALSE)
-radial
+plot(mol.tree, type = "radial",  edge.color = "darkgreen", tip.color = "black", font = 1, show.tip.label = FALSE)
 
-fan <- plot(mol.tree, type = "fan",  edge.color = "blue", tip.color = "black", font = 1, show.tip.label = FALSE)
-fan
+plot(mol.tree, type = "fan",  edge.color = "blue", tip.color = "black", font = 1, show.tip.label = FALSE)
 
-clade <- plot(mol.tree, type = "cladogram",  edge.color = "orange", tip.color = "black", font = 1, show.tip.label = FALSE)
-clade
+plot(mol.tree, type = "cladogram",  edge.color = "orange", tip.color = "black", font = 1, show.tip.label = FALSE)
 ```
 </div>
 the Ntip() function will tell you how many different species (or tips) are represented in your tree 
@@ -282,22 +280,17 @@ plot(morph.tree,no.margin=TRUE,edge.width=2)
 <div class = "blue">
 ```{r}
 par(mfrow = c(3, 3))
-phy2 <- plot(morph.tree, type = "phylogram",  edge.color = "purple", font = 1, show.tip.label = FALSE)
-phy2
+plot(morph.tree, type = "phylogram",  edge.color = "purple", font = 1, show.tip.label = FALSE)
 
-unroot2 <- plot(unroot(morph.tree),type="unrooted",cex=0.6,
+plot(unroot(morph.tree),type="unrooted",cex=0.6,
     use.edge.length=FALSE,lab4ut="axial",
     no.margin=TRUE, show.tip.label = FALSE, edge.color = "red")
-unroot2
 
-radial2 <- plot(morph.tree, type = "radial",  edge.color = "darkgreen", tip.color = "black", font = 1, show.tip.label = FALSE)
-radial2
+plot(morph.tree, type = "radial",  edge.color = "darkgreen", tip.color = "black", font = 1, show.tip.label = FALSE)
 
-fan2 <- plot(morph.tree, type = "fan",  edge.color = "blue", tip.color = "black", font = 1, show.tip.label = FALSE)
-fan2
+plot(morph.tree, type = "fan",  edge.color = "blue", tip.color = "black", font = 1, show.tip.label = FALSE)
 
-clade2 <- plot(morph.tree, type = "cladogram",  edge.color = "orange", tip.color = "black", font = 1, show.tip.label = FALSE)
-clade2
+plot(morph.tree, type = "cladogram",  edge.color = "orange", tip.color = "black", font = 1, show.tip.label = FALSE)
 ```
 </div>
 
@@ -391,13 +384,13 @@ tree1<- as.dendrogram(tree1)
 tree2<- as.dendrogram(tree2)
 
 dndlist <- dendextend::dendlist(tree1, tree2)
-prunedplot <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "r")
+prunedplot <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 1, edge.lwd = .1, type = "r")
 ```  
 </div>
 This code will give you a triangle tanglegram, which is another way to visualize the two trees.  
 <div class = "blue">
 ```{r}
-prunedplotri <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "t")
+prunedplotri <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 1, edge.lwd = .1, type = "t")
 ```
 </div>
 Next we want to try isolating certain taxa to compare them between the two trees. To do this you have to find the you have to find the number associated for the label you want to highlight. For this example we want to isolate the species  _A. tracta_ and then use the command color_labels().
@@ -410,7 +403,7 @@ tree2 <- color_labels(tree2, col = "red", labels = labels(tree2)[c(3)])
 #highlighting certain taxa in each tree manually
 
 dndlist <- dendextend::dendlist(tree1, tree2)
-prunedplottaxa <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "r")
+prunedplottaxa <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 1, edge.lwd = .1, type = "r")
 ```
 </div>
 
@@ -426,26 +419,18 @@ tree1 <- color_labels(tree1, col = "hotpink", labels = labels(tree1)[c(38)])
 labels(tree2)
 tree2 <- color_labels(tree2, col = "hotpink", labels = labels(tree2)[c(41)])
 dndlist <- dendextend::dendlist(tree1, tree2)
-prunedplottaxa <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "r")
+prunedplottaxa <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 1, edge.lwd = .1, type = "r")
 ```
 </div>
 There are also arguments within tanglegram() to highlight species and branches. k_branches and k_labels will assign colors to the number of branches and clades you specify respectively. We used the k_labels arguments to differentiate between the lowland clade in blue and the montane in red.
 <div class = "blue">
 ```{r}
-prunedplotcolor <- dendextend::tanglegram(dndlist, faster = TRUE, margin_inner = 7, lab.cex = .88, lwd =0.5, edge.lwd = 0.5, type = "r", main_left = "Molecular", main_right = "Morphological", highlight_branches_col = TRUE, highlight_branches_lwd = TRUE, k_branches = 5, k_labels=2, center=TRUE) 
+prunedplotcolor <- dendextend::tanglegram(dndlist, faster = TRUE, margin_inner = 7, lab.cex = .88, lwd =1, edge.lwd = 0.5, type = "r", main_left = "Molecular", main_right = "Morphological", highlight_branches_col = TRUE, highlight_branches_lwd = TRUE, k_branches = 5, k_labels=2, center=TRUE) 
 #color coded tanglegram
 ```
 </div>
-Next we are going to work with the command untangel() in dendextend. This useful command will rearrange the tree into the simplest configuration without changing the phylogenetic relationships. 
-<div class = "blue">
-```{r}
-prunedplotuntangle<-prunedplot %>% untangle(method = "step1side") %>% tanglegram(common_subtrees_color_lines = TRUE,  faster = TRUE, margin_inner = 7, lab.cex = .88, lwd =0.5, edge.lwd = 0.5, type = "r", main_left = "Molecular", main_right = "Morphological", highlight_branches_col = TRUE, highlight_branches_lwd = TRUE, k_branches = 5, k_labels=2, center=TRUE)
-#untangled color coded tanglegram
-```
-</div>
-Now we can clearly see the associations between these trees and the individuals and how they were rearranged. You can go branch by branch and follow the shaded lines to view where they are on the opposite tree.
 
-We can use the untangle function to improve the quality of alignment between two trees. When both trees are arranged in their most untangled state, we can then assess the quality of the alignment between these two trees using "entanglement". Entanglement is a measure of similarity between two phylogenetic trees and ranges from 0 to 1. An entanglement score of 0 would mean that the trees on either side of the tanglegram are identical. 
+We can use the untangle function to improve the quality of alignment between two trees. When both trees are arranged in their most untangled state, we can then assess the quality of the alignment between these two trees using "entanglement". Entanglement is a measure of similarity between two phylogenetic trees and ranges from 0 to 1. An entanglement score of 0 would mean that the trees on either side of the tanglegram are identical. First let's find the entanglement score for the tanglegram.
 <div class = "blue">
 ```{r}
 x <- prunedplot
@@ -454,9 +439,18 @@ x %>% plot(main = paste("entanglement =", round(entanglement(x), 2)))
 </div>
 The entanglement score of our trees is 0.44
 
+Next we are going to work with the command untangle() in dendextend. This useful command will rearrange the tree into the simplest configuration without changing the phylogenetic relationships.
+<div class = "blue">
+```{r}
+prunedplotuntangle<-prunedplot %>% untangle(method = "step1side") %>% tanglegram(common_subtrees_color_lines = TRUE,  faster = TRUE, margin_inner = 7, lab.cex = .88, lwd =1, edge.lwd = 0.5, type = "r", main_left = "Molecular", main_right = "Morphological", highlight_branches_col = TRUE, highlight_branches_lwd = TRUE, k_branches = 5, k_labels=2, center=TRUE)
+#untangled color coded tanglegram
+```
+</div>
+Now we can clearly see the associations between these trees and the individuals and how they were rearranged. You can go branch by branch and follow the shaded lines to view where they are on the opposite tree.
+
 ### CHALLENGE 8 (aka an entanglement score for an untangled tanglegram)
 
-As we discussed above, untangling your tanglegram will help remove any patterns in the tanglegram and the entanglement analysis that are not due to phylogentic relationships (say that 5 times fast). Try using the entanglement function to get an entanglement score for the untangled tangelgram.
+As we discussed above, untangling your tanglegram will help remove any patterns in the tanglegram and the entanglement analysis that are not due to phylogentic relationships. Try using the entanglement function to get an entanglement score for the untangled tanglegram (say that 5 times fast).
 
 #### SOLUTION 8
 
