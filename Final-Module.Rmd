@@ -391,13 +391,13 @@ tree1<- as.dendrogram(tree1)
 tree2<- as.dendrogram(tree2)
 
 dndlist <- dendextend::dendlist(tree1, tree2)
-prunedplotog <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "r")
+prunedplot <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "r")
 ```  
 </div>
 This code will give you a triangle tanglegram, which is another way to visualize the two trees.  
 <div class = "blue">
 ```{r}
-prunedplotog <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "t")
+prunedplotri <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "t")
 ```
 </div>
 Next we want to try isolating certain taxa to compare them between the two trees. To do this you have to find the you have to find the number associated for the label you want to highlight. For this example we want to isolate the species  _A. tracta_ and then use the command color_labels().
