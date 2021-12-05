@@ -37,24 +37,22 @@ In order to assess any changes between these hypothesized evolutionary relations
 <h4><p class="text-primary">Anatomy of a tree:</p></h4>  
 ![__Why would we compare tree topologies?__](https://media.springernature.com/full/springer-static/image/art%3A10.1007%2Fs12052-008-0035-x/MediaObjects/12052_2008_35_Fig2_HTML.gif?as=webp)
 
-# Methods
+## Methods
 
 There are several different ways to estimate phylogenies, each with their own strengths, weaknesses, and appropriate situations in which to apply them. While we won’t go over them in detail, familiarize yourselves by looking at <a href="https://fuzzyatelin.github.io/bioanth-stats/module-24/module-24.html)">Module 24</a>  
 There are MANY different phylogenetics software that we can use to employ these methods of estimation, but some of the most common are PAUP, BEAST, MrBayes, and PHYLIP. These can take genetic data (alignments) in the form of fastq files, fasta files, or NEXUS files.  
 
 <h4><p class="text-primary">Types of Tree Formats: Newick, Nexus</p></h4>
+__Newick__: A collection of data formatted using specific syntax that includes parentheses, commas, and semicolons to delineate weight, time, and evolutionary distance. “Newick files are simply text files that consist of one or more tree descriptions in the Newick notation. In contrast to Nexus files they contain no further syntax elements or other information than the trees.”
 
-There are several different formats that a graphical tree can be built from.    
-_Newick_: A collection of data formatted using specific syntax that includes parentheses, commas, and semicolons to delineate weight, time, and evolutionary distance. “Newick files are simply text files that consist of one or more tree descriptions in the Newick notation. In contrast to Nexus files they contain no further syntax elements or other information than the trees.”
-
-# Comparing Trees
+## Comparing Trees
 
 We will be comparing two graphical hypotheses of the genus _adelpha_, a group of butterflies.
 ![image](https://onlinelibrary.wiley.com/cms/asset/1d72eca6-ecb9-4b23-8230-868514c2fa01/mec13168-fig-0001-m.jpg)
 
 In this module, we will compare tree topologies for two different analyses of the genus Adelpha; one based on morphological data and the other based on molecular data. The morphological-based tree is from Keith Wilmott’s 2003 paper [“Cladistic analysis of the Neotropical butterfly genus Adelpha (Lepidoptera: Nymphalidae), with comments on the subtribal classification of Limenitidini.”](https://onlinelibrary.wiley.com/doi/abs/10.1046/j.1365-3113.2003.00209.x) Our molecular tree is from Emily Ebel’s 2015 paper [“Rapid diversification associated with ecological specialization in Neotropical Adelpha butterflies.”](https://onlinelibrary.wiley.com/doi/10.1111/mec.13168)
 
-# Packages
+## Packages
 
 >For starters, you will need to install [{ape}](https://www.rdocumentation.org/packages/ape/versions/5.5), [{phytools}](https://www.rdocumentation.org/packages/phytools/versions/0.7-90)
 [{fastmatch}](https://cran.r-project.org/web/packages/fastmatch/index.html)
@@ -62,7 +60,9 @@ In this module, we will compare tree topologies for two different analyses of th
 [{phangorn}](https://www.rdocumentation.org/packages/phangorn/versions/2.7.1)
 [{geiger}](https://www.rdocumentation.org/packages/geiger/versions/2.0.7)
 [{ggplot2}](https://www.rdocumentation.org/packages/ggplot2/versions/3.3.5)
+[{gridExtra}](https://www.rdocumentation.org/packages/gridExtra/versions/2.3)
 [{ggtree}](https://www.rdocumentation.org/packages/ggtree/versions/1.4.11)
+[{dendexend}](https://www.rdocumentation.org/packages/dendextend/versions/1.15.1)
 
 Unlike many packages we've used this semester, you will need to install ggtree from the BiocManager, not baseR. You can do this using the code below 
 
@@ -108,6 +108,7 @@ To start off, we want to understand how a tree is created. For this example we w
 Here is a great explanation of Newick format: __"Put simply, monophyletic clades are surrounded by parentheses and sister clades are separated by commas. For example, a simple tree could be written as (((A,B),C),(D,E))."__ Let's try making that!
 
 ### CHALLENGE 1
+
 If you already know the relationships between the groups of species that you want to plot, you can simply write out the tree as a text string in Newick format! Let's try it first with letters. Try to recreate the tree in the image below by writing it as a text string in Newick format 
 
 ![image](https://raw.githubusercontent.com/sinnabunbun/Super-Fly-Group-Module/main/abcs.jpg)
@@ -133,7 +134,7 @@ For our second challenge, try recreating the whale clade in the image below usin
 
 ![image](https://raw.githubusercontent.com/sinnabunbun/Super-Fly-Group-Module/main/whales.jpg)
 
-#### SOLUTION 1
+#### SOLUTION 2
 
 Great Job! 
 <div class = "blue">
@@ -166,6 +167,7 @@ We can also make a fan tree! the command "edge.width" allows you to adjust the t
 plot(whale.tree, type = "fan", edge.width = 3, show.tip.label = FALSE)
 ```
 </div>
+While these trees all show the same information it is helpful to have different representations. For example this fan tree helps visualize that the evolutionary relationships between species are non linear. It is often confused that certain species or genera are more "evolved" or "older" but tree formats like fan trees are a helpful way to show how this is misleading.
 
 ### CHALLENGE 3
 
@@ -179,16 +181,16 @@ plot(whale.tree, type = "phylogram",  edge.color = "red")
 </div>	
 <div class = "blue">	
 ```{r}
-plot(whale.tree, type = "phylogram",  edge.color = "red", tip.color = "green")
+plot(whale.tree, type = "phylogram",  edge.color = "red", tip.color = "darkgreen")
 ```
 </div>
 <div class = "blue">
 ```{r}
-plot(whale.tree, type = "phylogram",  edge.color = "red", tip.color = "green", font = 4)
+plot(whale.tree, type = "phylogram",  edge.color = "red", tip.color = "darkgreen", font = 4)
 ```
 </div>
 	
-# Load Molecular Tree Data
+## Load Molecular Tree Data
 
 Now that we are a little more comfortable working with phylogenetic trees in R, we can load our first tree! 
 
@@ -202,10 +204,10 @@ mol.tree<-read.nexus(file="NJst.tre")
 mol.tree
 ```
 </div>
-Once the tree is loaded, we can try plotting it! 
+Once the tree is loaded, we can try plotting it! Here's a couple ways you can try plotting it: 
 <div class = "blue">
 ```{r}
-par(mfrow = c(2, 3))
+par(mfrow = c(3, 3))
 phy <- plot(mol.tree, type = "phylogram",  edge.color = "purple", font = 1, show.tip.label = FALSE)
 phy
 
@@ -214,7 +216,7 @@ unroot <- plot(unroot(mol.tree),type="unrooted",cex=0.6,
     no.margin=TRUE, show.tip.label = FALSE, edge.color = "red")
 unroot
 
-radial <- plot(mol.tree, type = "radial",  edge.color = "green", tip.color = "black", font = 1, show.tip.label = FALSE)
+radial <- plot(mol.tree, type = "radial",  edge.color = "darkgreen", tip.color = "black", font = 1, show.tip.label = FALSE)
 radial
 
 fan <- plot(mol.tree, type = "fan",  edge.color = "blue", tip.color = "black", font = 1, show.tip.label = FALSE)
@@ -252,7 +254,7 @@ add.arrow(mol.tree,tip="A_saundersii_saundersii",arrl=4)
 ```
 </div>
 
-With nexus trees, you can also create node labels. This is especially useful if you want to highlight a specific node. 
+With Nexus trees, you can also create node labels. This is especially useful if you want to highlight a specific node. 
 <div class = "blue">
 ```{r}
 plot(mol.tree,no.margin=TRUE,edge.width=2)
@@ -268,7 +270,7 @@ arc.cladelabels(tree=mol.tree, "A. rothschildi", node = 4, cex=1, orientation="c
 
 ## Morphological Tree
 
-In order to compare molecular and morphological trees of the Adelpha lineage, we needed to build a tree in R from a phylogeny constructed based on morphological data, like the one reported in Keith Wilmott's paper. However, because this tree was created in 2003 and is therefore not in a format that is easily compatible with current R software, we ended up transcribing the tree into R in Newick format based on the phylogenetic relationships presented in Wilmott's Figure 8. 
+In order to compare molecular and morphological trees of the Adelpha lineage, we needed to build a tree in R from a phylogeny constructed based on morphological data, like the one reported in Keith Wilmott's paper. However, because this tree was created in 2003 and is therefore not in a format that is easily compatible with current R software, we ended up transcribing the tree into R in Newick format based on the phylogenetic relationships presented in Wilmott's Figure 8. This is great for visualizing the tree but there are some drawbacks to this method. Having a tree without character matrix data makes it harder to run statistical tests- which is why molecular data is helpful for phylogenetic analysis as it provides that data.
 <div class = "blue">
 ```{r}
 string <- "((A_alala_negra, A_corcyra_aretina, A_tracta, A_pithys, A_donysa_donysa), ((A_serpacelerio, A_seriphiaaquillia, A_seriphiatherasia), (A_melonaleucocoma, A_salmoneus_colada, A_cytherea_cytherea, A_cythereadaguana, A_epioneagilla, A_etheldaethelda, A_thessaliathessalia, A_iphicleolathessalita, A_iphiclusiphiclus, A_shuara, A_plesaurephliassa, A_basiloides, A_atticaattica, A_leucerioides, A_saundersiisaundersii, A_boreasboreas, A_rothschildi, A_sichaeus, A_cocalacocala, A_leucophthalmairminella, A_irminatumida, A_pollina, A_lycoriaslara, A_lycoriasspruceana, A_erotia_erotia, A_mesentina, A_phylaca_pseudaethalia, A_capucinus_capucinus, A_heraclea_heraclea, A_naxia_naxia, A_justina_valentina, A_olynthia, A_jordani, A_zinazina, A_zinairma, A_delinita_delinita, A_boeotia_boeotia, A_maleaaethalia)));"
@@ -279,7 +281,7 @@ plot(morph.tree,no.margin=TRUE,edge.width=2)
 </div>
 <div class = "blue">
 ```{r}
-par(mfrow = c(2, 3))
+par(mfrow = c(3, 3))
 phy2 <- plot(morph.tree, type = "phylogram",  edge.color = "purple", font = 1, show.tip.label = FALSE)
 phy2
 
@@ -288,7 +290,7 @@ unroot2 <- plot(unroot(morph.tree),type="unrooted",cex=0.6,
     no.margin=TRUE, show.tip.label = FALSE, edge.color = "red")
 unroot2
 
-radial2 <- plot(morph.tree, type = "radial",  edge.color = "green", tip.color = "black", font = 1, show.tip.label = FALSE)
+radial2 <- plot(morph.tree, type = "radial",  edge.color = "darkgreen", tip.color = "black", font = 1, show.tip.label = FALSE)
 radial2
 
 fan2 <- plot(morph.tree, type = "fan",  edge.color = "blue", tip.color = "black", font = 1, show.tip.label = FALSE)
@@ -314,63 +316,56 @@ p
 <div class = "blue">
 ```{r}
 #Molecular tree plot 
-g <- ggtree(mol.tree, color="green", size=0.5)
+g <- ggtree(mol.tree, color="darkgreen", size=0.5)
 g <- g + geom_tiplab(size=2)
 g
 ```
 </div>
+
+### CHALLENGE 5
+
+Now we want to see these trees side by side, we'll go over direct comparison later in the module but for now, use the grid.arrange() command in `gridExtra` to place these trees side by side. Notice the major differences between the two, how might these compare?
+
+#### SOLUTION 5
+
 <div class = "blue">
 ```{r}
 library("gridExtra")
 grid.arrange(
-    ggtree(mol.tree, color="red") + theme_tree("steelblue"),
-    ggtree(morph.tree, color="white") + theme_tree("black"),
+    ggtree(mol.tree, color="purple") + theme_tree("hotpink"),
+    ggtree(morph.tree, color="hotpink") + theme_tree("purple"),
     ncol=2)
 ```
 </div>
+The first thing you probably notice is the difference in complexity, the molecular tree has a more detailed relationship between species than the morphological tree.
 
 ## Comparison
 
 Now we will get into comparing our morphological tree and our molecular tree. First we will use the function all.equal from the APE package. This is a good place to start when comparing trees because it will tell you the basics: are these trees the same?
 <div class = "blue">	
 ```{r}            
-all.equal(mol.tree, morph.tree, use.edge.length = TRUE,
-                   use.tip.label = TRUE)
+all.equal(mol.tree, morph.tree, use.edge.length = TRUE, use.tip.label = TRUE)
 ```
 </div>
 It's a good exploratory function, but after we learn that they are not the same, we have to dig deeper.
 
-Let's see if the trees are ultrametric.
-<div class = "blue">
-```{r}#fix for knit
-is.ultrametric(mol.tree)
-##is.ultrametric(morph.tree) ? 
-```
-</div>
-This will tell you that the molecular tree is __NOT ultrametric__, which means the tips of the tree are not equally distant from the root of their respective tree. We get an error about the morphological tree's lack of branch lengths, so let's try a different function that will give us more information.
 
-When both trees are non-ultrametric, we are limited to the number of analyses that we can perform.
+### CHALLENGE 6
 
-Next we'll try comparing phylogenetic tree topographies using the comparePhylo function from the APE package.
-<div class = "blue">
-```{r}
-comparePhylo(morph.tree, mol.tree, plot = FALSE, force.rooted = FALSE,
-             use.edge.length = FALSE)
-```
-</div>
-The morphological tree is also non-ultrametric. Essentially, both trees have structure and are not one big polytomy, and branch lengths differ, although one phylogeny is more structured than the other. Can you tell which one it is? 
+Next we'll try comparing phylogenetic tree topographies using the comparePhylo() function from the APE package. Check the output to see if these trees are ultrametric and compare the differences in nodes. How many nodes does the morphological tree have? How many does the molecular have? Going one step further, how many of the clades in the molecular tree are not represented in the morphological tree.
 
-It also tells us that they have different numbers of tips (46 and 66) which makes sense because they aren't looking at the same number of individuals. Naturally because of this, these trees will inherently be different from each other structurally. The morph tree has fewer nodes not only because it's hypothesizing the relationships among fewer individuals, but also because there is more uncertainty. This tree is comb like, and we can interpret this as an unresolved phylogeny. 
+#### SOLUTION 6
 
-When both trees are non-ultrametric, the number of analyses that we can perform is limited. Let's explore what more we can learn about these trees.
-
-We can also see that the morphological tree is rooted and the molecular tree is unrooted. We can either go back and adjust the molecular tree to root it, or we can adjust our code to force root both trees and analyze the molecular tree as if it were rooted.
 <div class = "blue">
 ```{r}
 comparePhylo(morph.tree, mol.tree, plot = FALSE, force.rooted = TRUE, use.edge.length = FALSE)
 ```
 </div>
-This shows the number of clades that are different in each tree. As we can see, there are a lot more clades in the molecular tree than the morphological tree.
+This tells you that both the trees are non-ultrametric. Essentially, both trees have structure and are not one big polytomy, and branch lengths differ, although one phylogeny is more structured than the other. Can you tell which one it is? 
+
+It also tells us that they have different numbers of tips (46 and 66) which makes sense because they aren't looking at the same number of individuals. Naturally because of this, these trees will inherently be different from each other structurally. The morphological tree has fewer nodes not only because it's hypothesizing the relationships among fewer individuals, but also because there is more uncertainty. This tree is comb like, and we can interpret this as an unresolved phylogeny. 
+
+When both trees are non-ultrametric, the number of analyses that we can perform is limited. Let's explore what more we can learn about these trees.
 
 Check to see if they are binary. According to the APE package, "The test differs whether the tree is rooted or not. An urooted tree is considered binary if all its nodes are of degree three (i.e., three edges connect to each node). A rooted tree is considered binary if all nodes (including the root node) have exactly two descendant nodes, so that they are of degree three expect the root which is of degree 2." Our molecular tree is unrooted and our morphological tree is rooted, so keep that in mind.
 <div class = "blue">
@@ -381,80 +376,133 @@ is.binary(morph.tree)
 </div>
 Now, let's try to plot these trees and view the characters that they have in common. Let's use the package dendextend. You will get some errors about the mol.tree being non-ultrametric and the morph.tree having a branch length of zero, but keep going through to plot(prunedplot).
 <div class = "blue">
-```{r}#knit fix
+```{r}
 library(ape)
 library(phytools)
 library(dendextend)
-library(viridis)
-library(dplyr)
 library(phylogram)
 
 tree1 <- mol.tree
 tree1 <- midpoint.root(tree1)
 tree2 <- morph.tree
-##tree2 <- midpoint.root(tree2)
 tree1 <- compute.brlen(tree1)
 tree2 <- compute.brlen(tree2)
 tree1<- as.dendrogram(tree1)
-tree1
 tree2<- as.dendrogram(tree2)
 
 dndlist <- dendextend::dendlist(tree1, tree2)
-prunedplot <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 1.8, lab.cex = 0.3, lwd = 
-0.5, edge.lwd = 0.5, type = "r")
+prunedplotog <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "r")
+```  
+</div>
+This code will give you a triangle tanglegram, which is another way to visualize the two trees.  
+<div class = "blue">
+```{r}
+prunedplotog <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "t")
+```
+</div>
+Next we want to try isolating certain taxa to compare them between the two trees. To do this you have to find the you have to find the number associated for the label you want to highlight. For this example we want to isolate the species  _A. tracta_ and then use the command color_labels().
+<div class = "blue">
+```{r}
+labels(tree1) #A_tracta is 19
+tree1 <- color_labels(tree1, col = "red", labels = labels(tree1)[c(19)])
+labels(tree2)
+tree2 <- color_labels(tree2, col = "red", labels = labels(tree2)[c(3)])
+#highlighting certain taxa in each tree manually
 
-plot(prunedplot)
+dndlist <- dendextend::dendlist(tree1, tree2)
+prunedplottaxa <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "r")
+```
+</div>
+
+### CHALLENGE 7
+
+Now it's your turn! Try selecting a species to isolate and then identifying its number. You can also isolate multiple species or change the color of the label.
+
+#### SOLUTION 7
+
+<div class = "blue">
+```{r}
+tree1 <- color_labels(tree1, col = "hotpink", labels = labels(tree1)[c(38)])
+labels(tree2)
+tree2 <- color_labels(tree2, col = "hotpink", labels = labels(tree2)[c(41)])
+dndlist <- dendextend::dendlist(tree1, tree2)
+prunedplottaxa <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "r")
+```
+</div>
+There are also arguments within tanglegram() to highlight species and branches. k_branches and k_labels will assign colors to the number of branches and clades you specify respectively. We used the k_labels arguments to differentiate between the lowland clade in blue and the montane in red.
+<div class = "blue">
+```{r}
+prunedplotcolor <- dendextend::tanglegram(dndlist, faster = TRUE, margin_inner = 7, lab.cex = .88, lwd =0.5, edge.lwd = 0.5, type = "r", main_left = "Molecular", main_right = "Morphological", highlight_branches_col = TRUE, highlight_branches_lwd = TRUE, k_branches = 5, k_labels=2, center=TRUE) 
+#color coded tanglegram
+```
+</div>
+Next we are going to work with the command untangel() in dendextend. This useful command will rearrange the tree into the simplest configuration without changing the phylogenetic relationships. 
+<div class = "blue">
+```{r}
+prunedplotuntangle<-prunedplot %>% untangle(method = "step1side") %>% tanglegram(common_subtrees_color_lines = TRUE,  faster = TRUE, margin_inner = 7, lab.cex = .88, lwd =0.5, edge.lwd = 0.5, type = "r", main_left = "Molecular", main_right = "Morphological", highlight_branches_col = TRUE, highlight_branches_lwd = TRUE, k_branches = 5, k_labels=2, center=TRUE)
+#untangled color coded tanglegram
 ```
 </div>
 Now we can clearly see the associations between these trees and the individuals and how they were rearranged. You can go branch by branch and follow the shaded lines to view where they are on the opposite tree.
 
-## Reduction
-
-As you can see these trees are pretty large, the title is cut off in most views! Although in depth analysis might call for this many tip labels, we can also narrow down our species- which will help us narrow down what we're observing. __##This needs to be trimmed and I want to add teh code from abaove to link the trees once thats fixed for the knit__  
-<div class="blue">
+We can use the untangle function to improve the quality of alignment between two trees. When both trees are arranged in their most untangled state, we can then assess the quality of the alignment between these two trees using "entanglement". Entanglement is a measure of similarity between two phylogenetic trees and ranges from 0 to 1. An entanglement score of 0 would mean that the trees on either side of the tanglegram are identical. 
+<div class = "blue">
 ```{r}
-reduced.species<-c("A.alalanegra", "A.atticaattica", "A.basiloides", "A.boeotiaboeotia", "A.boreasboreas", "A.capucinuscapucinus", "A.cocalacocala", "A.corcyraaretina", "A.cythereacytherea", "A.cythereadaguana", "A.delinitadelinita", "A.donysadonysa", "A.epioneagilla", "A.erotiaerotia", "A.heracleaheraclea", "A.iphicleolathessalita", "A.iphiclusiphiclus", "A.irminatumida", "A.jordani", "A.justinavalentina", "A.seriphiatherasia")
-morph.reduced<-sapply(reduced.species,grep,morph.tree$tip.label)
-morph.reduced
-reduced.species<-morph.tree$tip.label[morph.reduced]
-reduced.species
-plotTree(morph.tree,type="fan",fsize=0.7,lwd=1,
-    ftype="i")
-add.arrow(morph.tree,tip=reduced.species,arrl=.5)
-morph.tree.reduced<-drop.tip(morph.tree,
-    setdiff(morph.tree$tip.label,reduced.species))
-plotTree(morph.tree.reduced,ftype="i")
-reduced.species.mol<-c("A_alala_negra", "A_attica_attica", "A_basiloides", "A_boeotia_boeotia", "A_boreas_boreas", "A_capucinus_capucinus", "A_cocala_cocala", "A_corcyra_aretina", "A_cytherea_cytherea", "A_cytherea_daguana", "A_delinita", "A_donysa_donysa", "A_epione_agilla", "A_erotia_erotia", "A_ethelda_ethelda", "A_heraclea", "A_iphicleola_thessalita", "A_iphiclus_iphiclus", "A_irmina_tumida", "A_jordani", "A_justina_valentina", "A_seriphia_therasia")
-mol.reduced<-sapply(reduced.species.mol,grep,mol.tree$tip.label)
-mol.reduced
-reduced.species.mol<-mol.tree$tip.label[mol.reduced]
-reduced.species.mol
-plotTree(mol.tree,type="fan",fsize=0.7,lwd=1,
-    ftype="i")
-add.arrow(mol.tree,tip=reduced.species.mol,arrl=1)
-mol.tree.reduced<-drop.tip(mol.tree,
-    setdiff(mol.tree$tip.label,reduced.species.mol))
-plotTree(mol.tree.reduced,ftype="i")
+x <- prunedplot
+x %>% plot(main = paste("entanglement =", round(entanglement(x), 2)))
 ```
 </div>
+The entanglement score of our trees is 0.44
 
-## Final Fixes
+### CHALLENGE 8 (aka an entanglement score for an untangled tanglegram)
 
-### Unsure about the following chunks:
+As we discussed above, untangling your tanglegram will help remove any patterns in the tanglegram and the entanglement analysis that are not due to phylogentic relationships (say that 5 times fast). Try using the entanglement function to get an entanglement score for the untangled tangelgram.
 
+#### SOLUTION 8
+
+<div class = "blue">
 ```{r}
-set.seed(1)
-
-# modify tip labels
-mol.tree$tip.label <- sub("t", "", mol.tree$tip.label, fixed = T)
-morph.tree$tip.label <- sub("t", "", morph.tree$tip.label, fixed = T)
-
-# create associations matrix 
-
-association <- cbind(mol.tree$tip.label, morph.tree$tip.label)
-
-# plot
-cophyloplot(mol.tree, morph.tree, assoc = association, length.line = 4, space = 28, gap = 3)
+y <- prunedplotuntangle
+y %>% plot(main = paste("entanglement =", round(entanglement(y), 2)))
 ```
+</div>
+The entanglement score of our untangled trees is 0.01 which is lower than the entanglement score of the original tanglegram. Generally an entanglement from an untangled tanglegram will be more representative of the true phylogenetic differences between two trees.
 
+# Concluding Remarks
 
+For those interested in comparing between morphological and molecular trees using a statistical analysis, there will be several things that may hinder you. Your tree must have branch lengths greater than zero, which may prove difficult if your morphological tree lacks structure like Wilmott 2003. Having branch lengths of zero may also be a common problem since morphological trees are largely unresolved and have high amounts of polytomy. Currently, there are no accessible ,reliable ways to statistically compare morphological trees to molecular trees, but biologists are working towards a solution for this. (Lee & Palci, 2015).
+
+This may also be difficult if you are using public data, like from dryad, because for an in-depth analysis, it’s often necessary to have the character matrix of morphological traits that the tree was originally built on, and that information may not be included (Sil et al, 2018). 
+
+Also, comparing just one morphological tree to just one molecular tree gives us a sample size of two, which would not yield reliable results. In similar studies measuring congruence of morphological vs molecular trees, the sample size is much higher, over 200  (Pisani, Benton & Wilkinson, 2007).
+
+Our original intention was to investigate how to compare morphological and molecular trees in order to see the differences in efficiency and how data visualization has progressed over the years. However, what we came to realize was that it’s not possible to statistically compare these two kinds of trees without a common factor like branch length. It would be desirable to make this comparison because it would give us a measure of how our scientific techniques have advanced but also give us a more accurate representation of evolution.
+
+# Works Cited
+
+- https://cran.r-project.org/web/views/Phylogenetics.html  
+- https://bookdown.org/bomeara/comparative-methods/getting-data-and-trees-into-r.html  
+- https://fuzzyatelin.github.io/bioanth-stats/module-24/module-24.html  
+- https://academic.oup.com/sysbio/article/64/2/205/1630737  
+- https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2928700/  
+- https://onlinelibrary.wiley.com/doi/pdf/10.1111/mec.13168  
+- https://www.cabdirect.org/cabdirect/abstract/20033203948  
+- https://onlinelibrary.wiley.com/doi/full/10.1046/j.1365-3113.2003.00209.x  
+- https://datadryad.org/stash/dataset/doi:10.5061%2Fdryad.v1h63  
+- https://www.r-phylo.org/wiki/HowTo/InputtingTrees   
+- https://cran.r-project.org/web/packages/TreeTools/vignettes/load-trees.html  
+- https://www.researchgate.net/publication/256072868_Comparison_between_Colony_Morphology_and_Molecular_Phylogeny_in_the_Caribbean_Scleractinian_Coral_Genus_Madracis  
+- http://www.phytools.org/Cordoba2017/ex/2/Intro-to-phylogenies.html  
+- https://www.molecularecologist.com/2017/02/08/phylogenetic-trees-in-r-using-ggtree/  
+- https://rdrr.io/cran/ape/man/  
+- https://academic.oup.com/bioinformatics/article/22/3/363/220436  
+- https://evolution-outreach.biomedcentral.com/articles/10.1007/s12052-008-0035-x/figures/2  
+- https://www.sciencedirect.com/science/article/pii/S096098221500812X  
+- https://www.sciencedirect.com/science/article/pii/S2314853517305188  
+- https://pubmed.ncbi.nlm.nih.gov/17657570/  
+- https://rdrr.io/cran/ape/man/comparePhylo.html  
+- https://stackoverflow.com/questions/64881039/how-can-i-create-a-large-tanglegram-in-r-that-is-readable-and-can-be-saved  
+- https://yulab-smu.top/treedata-book/chapter4.html  
+- https://cran.r-project.org/web/packages/dendextend/vignettes/FAQ.html  
+- https://rdrr.io/cran/dendextend/f/vignettes/FAQ.Rmd  
+- https://pedrohbraga.github.io/PhyloCompMethods-in-R-workshop/PhyloCompMethodsMaterial.html  

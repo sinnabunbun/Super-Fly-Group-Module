@@ -30,6 +30,8 @@ library(quadprog)
 library(phangorn)
 library(phytools)
 library(geiger)
+library(dendextend)
+library(phylogram)
 ```
 
 thats a mess but i'm trying to get colored dendrogram lines this code is the stuff i actually want to keep
@@ -40,8 +42,9 @@ tree2 <- morph.tree
 tree1 <- compute.brlen(tree1)
 tree2 <- compute.brlen(tree2)
 tree1<- as.dendrogram(tree1)
-tree2<- as.dendrogram(tree2)
+tree2<- as.dendrogram.phylo(tree2)
 
+par(mfrow = c(2, 2))
 dndlist <- dendextend::dendlist(tree1, tree2)
 prunedplotog <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "t")
 #original tanglegram
@@ -53,14 +56,41 @@ tree2 <- color_labels(tree2, col = "darkgreen", labels = labels(tree2)[c(3, 41)]
 #highlighting certain taxa in each tree manually
 
 dndlist <- dendextend::dendlist(tree1, tree2)
-prunedplotog <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "r")
+prunedplottaxa <- dendextend::tanglegram(dndlist, fast = TRUE, margin_inner = 5, lab.cex = 1, lwd = 0.5, edge.lwd = .1, type = "r")
 
-prunedplot <- dendextend::tanglegram(dndlist, faster = TRUE, margin_inner = 7, lab.cex = .88, lwd =0.5, edge.lwd = 0.5, type = "r", main_left = "Molecular", main_right = "Morphological", highlight_branches_col = TRUE, highlight_branches_lwd = TRUE, k_branches = 5, center=TRUE) #k_labels=2 overides the color for unique labels if you want the whole group
+prunedplotcolor <- dendextend::tanglegram(dndlist, faster = TRUE, margin_inner = 7, lab.cex = .88, lwd =0.5, edge.lwd = 0.5, type = "r", main_left = "Molecular", main_right = "Morphological", highlight_branches_col = TRUE, highlight_branches_lwd = TRUE, k_branches = 5, k_labels=2, center=TRUE) #k_labels=2 overides the color for unique species labels if you want the whole group
 #color coded tanglegram
 
-prunedplot %>% untangle(method = "step1side") %>% tanglegram(common_subtrees_color_lines = TRUE,  faster = TRUE, margin_inner = 7, lab.cex = .88, lwd =0.5, edge.lwd = 0.5, type = "r", main_left = "Molecular", main_right = "Morphological", highlight_branches_col = TRUE, highlight_branches_lwd = TRUE, k_labels = 2, k_branches = 5, center=TRUE)
+prunedplotuntangle<-prunedplot %>% untangle(method = "step1side") %>% tanglegram(common_subtrees_color_lines = TRUE,  faster = TRUE, margin_inner = 7, lab.cex = .88, lwd =0.5, edge.lwd = 0.5, type = "r", main_left = "Molecular", main_right = "Morphological", highlight_branches_col = TRUE, highlight_branches_lwd = TRUE, k_branches = 5, center=TRUE)
 #untangled color coded tanglegram
 #The reason the lines aren't color coded is the difference in edge length between the dendrograms i think a_corcyra_aretina is the answer but aggggggg prunedtree1[[1]][[2]] prunedtree2[[1]][[2]]
+```
+
+Additional reduction section but idk if we need it anymore
+```{r}
+reduced.species<-c("A.alalanegra", "A.atticaattica", "A.basiloides", "A.boeotiaboeotia", "A.boreasboreas", "A.capucinuscapucinus", "A.cocalacocala", "A.corcyraaretina", "A.cythereacytherea", "A.cythereadaguana", "A.delinitadelinita", "A.donysadonysa", "A.epioneagilla", "A.erotiaerotia", "A.heracleaheraclea", "A.iphicleolathessalita", "A.iphiclusiphiclus", "A.irminatumida", "A.jordani", "A.justinavalentina", "A.seriphiatherasia")
+morph.reduced<-sapply(reduced.species,grep,morph.tree$tip.label)
+morph.reduced
+reduced.species<-morph.tree$tip.label[morph.reduced]
+reduced.species
+plotTree(morph.tree,type="fan",fsize=0.7,lwd=1,
+    ftype="i")
+add.arrow(morph.tree,tip=reduced.species,arrl=.5)
+morph.tree.reduced<-drop.tip(morph.tree,
+    setdiff(morph.tree$tip.label,reduced.species))
+plotTree(morph.tree.reduced,ftype="i")
+reduced.species.mol<-c("A_alala_negra", "A_attica_attica", "A_basiloides", "A_boeotia_boeotia", "A_boreas_boreas", "A_capucinus_capucinus", "A_cocala_cocala", "A_corcyra_aretina", "A_cytherea_cytherea", "A_cytherea_daguana", "A_delinita", "A_donysa_donysa", "A_epione_agilla", "A_erotia_erotia", "A_ethelda_ethelda", "A_heraclea", "A_iphicleola_thessalita", "A_iphiclus_iphiclus", "A_irmina_tumida", "A_jordani", "A_justina_valentina", "A_seriphia_therasia")
+mol.reduced<-sapply(reduced.species.mol,grep,mol.tree$tip.label)
+mol.reduced
+reduced.species.mol<-mol.tree$tip.label[mol.reduced]
+reduced.species.mol
+plotTree(mol.tree,type="fan",fsize=0.7,lwd=1,
+    ftype="i")
+add.arrow(mol.tree,tip=reduced.species.mol,arrl=1)
+mol.tree.reduced<-drop.tip(mol.tree,
+    setdiff(mol.tree$tip.label,reduced.species.mol))
+plotTree(mol.tree.reduced,ftype="i")
+```
 ```
 
 ```{r so i don't lose it}
